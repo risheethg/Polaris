@@ -1,0 +1,197 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Polaris Design System - Celestial Career Navigation
+Colors inspired by deep space with vibrant accents for an inspiring, trustworthy interface.
+All colors MUST be HSL for consistency.
+*/
+
+@layer base {
+  :root {
+    /* Matte Dark Space Background - Calm and sophisticated */
+    --background: 217 14% 13%;             /* Deep blue #181b25 */
+    --background-gradient: linear-gradient(135deg, hsl(217 14% 13%) 0%, hsl(217 14% 16%) 100%);
+    --foreground: 210 17% 94%;             /* Off-white for readability #F0F0F0 */
+
+    /* Card backgrounds with matte finish */
+    --card: 212 18% 20%;                   /* Muted dark slate blue #243446 */
+    --card-foreground: 210 17% 94%;
+    --card-glass: 212 18% 20% / 0.9;      /* Less transparent for matte look */
+
+    --popover: 212 18% 20%;
+    --popover-foreground: 210 17% 94%;
+
+    /* Primary - Matte Gold (the "Polaris" accent color) */
+    --primary: 39 32% 59%;                 /* Matte gold #c7ac6b */
+    --primary-foreground: 217 14% 13%;    /* Dark background on gold */
+    --primary-glow: 39 32% 70%;            /* Lighter gold for subtle glows */
+
+    /* Secondary - Dusty Blue-Grey */
+    --secondary: 205 20% 32%;              /* Dusty blue-grey #415562 */
+    --secondary-foreground: 210 17% 94%;
+    --secondary-glow: 205 20% 40%;
+
+    /* Accent - Muted Sage Green */
+    --accent: 84 7% 45%;                   /* Muted sage green #737d77 */
+    --accent-foreground: 210 17% 94%;
+    --accent-glow: 84 7% 55%;
+
+    /* Muted tones for subtle elements */
+    --muted: 205 20% 25%;                  /* Darker muted tone */
+    --muted-foreground: 84 7% 60%;        /* Muted sage text */
+
+    /* Destructive - Muted warning */
+    --destructive: 0 45% 55%;              /* Muted red */
+    --destructive-foreground: 210 17% 94%;
+
+    /* Borders and inputs */
+    --border: 205 20% 30%;                 /* Subtle borders */
+    --input: 205 20% 25%;                  /* Input backgrounds */
+    --ring: 39 32% 59%;                    /* Focus rings use matte gold */
+
+    --radius: 1rem;                        /* Rounded corners for modern feel */
+
+    /* Constellation colors for career paths */
+    --constellation-tech: 210 100% 65%;    /* Tech cluster - bright blue */
+    --constellation-creative: 280 100% 65%; /* Creative cluster - purple */
+    --constellation-business: 35 100% 65%; /* Business cluster - orange */
+    --constellation-science: 140 100% 65%; /* Science cluster - green */
+    --constellation-health: 340 100% 65%;  /* Health cluster - pink */
+
+    /* Animation variables */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    
+    /* Glassmorphism variables */
+    --glass-bg: hsl(240 15% 12% / 0.7);
+    --glass-border: hsl(210 17% 94% / 0.1);
+    --glass-shadow: 0 8px 32px 0 hsl(240 23% 9% / 0.37);
+  }
+
+  .dark {
+    /* Dark mode maintains the matte palette */
+    --background: 217 14% 13%;
+    --foreground: 210 17% 94%;
+    --card: 212 18% 20%;
+    --card-foreground: 210 17% 94%;
+    --popover: 212 18% 20%;
+    --popover-foreground: 210 17% 94%;
+    --primary: 39 32% 59%;
+    --primary-foreground: 217 14% 13%;
+    --secondary: 205 20% 32%;
+    --secondary-foreground: 210 17% 94%;
+    --muted: 205 20% 25%;
+    --muted-foreground: 84 7% 60%;
+    --accent: 84 7% 45%;
+    --accent-foreground: 210 17% 94%;
+    --destructive: 0 45% 55%;
+    --destructive-foreground: 210 17% 94%;
+    --border: 205 20% 30%;
+    --input: 205 20% 25%;
+    --ring: 39 32% 59%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body;
+    background: var(--background-gradient);
+    min-height: 100vh;
+  }
+
+  /* Typography scale */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+@layer components {
+  /* Glassmorphism utility classes */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+
+  /* Glow effects for interactive elements */
+  .glow-primary {
+    box-shadow: 0 0 20px hsl(var(--primary-glow) / 0.5);
+  }
+
+  .glow-secondary {
+    box-shadow: 0 0 20px hsl(var(--secondary-glow) / 0.5);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 20px hsl(var(--accent-glow) / 0.5);
+  }
+
+  /* Starfield animation */
+  .starfield {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.6;
+  }
+
+  /* Constellation line animation */
+  .constellation-line {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: drawLine 2s ease-in-out forwards;
+  }
+
+  @keyframes drawLine {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* Hover animations */
+  .hover-glow {
+    transition: var(--transition-smooth);
+  }
+
+  .hover-glow:hover {
+    transform: scale(1.05);
+  }
+
+  /* Pulse animation for stars/nodes */
+  .pulse-star {
+    animation: pulseStar 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseStar {
+    0%, 100% {
+      opacity: 0.8;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+  }
+
+  /* Smooth reveal animation */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: reveal 0.8s ease-out forwards;
+  }
+
+  @keyframes reveal {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
