@@ -7,7 +7,7 @@ from app.core.security import get_current_user_token, get_current_active_user
 from app.models.user import User, UserCreate
 from app.repos.users_repo import users_repo
 
-router = APIRouter()
+router = APIRouter(tags=["Users"])
 
 
 @router.post("/register", status_code=status.HTTP_201_CREATED, response_model=User)
@@ -26,7 +26,7 @@ async def register_user(
     # Check if the user already exists in Firestore
     if await users_repo.get(user_uid):
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
+            status_code=status.HTTP_409_CONFLICT,
             detail="This user has already been registered."
         )
 
@@ -36,7 +36,7 @@ async def register_user(
     return created_user
 
 
-@router.post("/login", response_model=User)
+@router.post("/token", response_model=User)
 async def login_user(
     # This dependency handles everything: token validation AND fetching the user from Firestore.
     current_user: User = Depends(get_current_active_user)
@@ -48,7 +48,7 @@ async def login_user(
     return current_user
 
 
-@router.post("/logout")
+@router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
 def logout_user():
     """
     Client-side responsibility. This endpoint is a placeholder.
