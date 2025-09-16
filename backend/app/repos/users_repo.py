@@ -11,7 +11,7 @@ class UserRepository:
         """
         db = get_firestore_client()
         user_doc_ref = db.collection("users").document(uid)
-        user_doc = await user_doc_ref.get()
+        user_doc = user_doc_ref.get()
 
         if user_doc.exists:
             # Pass the UID into the model since it's the document's ID
@@ -33,7 +33,7 @@ class UserRepository:
         uid = user_data.pop("uid")
         
         # set() creates or overwrites a document
-        await db.collection("users").document(uid).set(user_data)
+        db.collection("users").document(uid).set(user_data)
         
         # Re-fetch the created user to return a consistent object
         created_user = await self.get(uid)

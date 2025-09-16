@@ -1,12 +1,16 @@
+# backend/app/core/config.py
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
+import logging
 
 class Settings(BaseSettings):
     """
-    Application settings loaded from environment variables.
+    Application settings loaded from environment variables from a .env file.
     """
-    FIREBASE_CREDENTIALS_PATH: str
-
-    model_config = SettingsConfigDict(env_file=".env")
+    
+    LOGGER: int = logging.INFO  # Default to INFO level
+    
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 # Create a single instance to be used across the application
 settings = Settings()
