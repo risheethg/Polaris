@@ -36,6 +36,8 @@ export const Landing = () => {
               'Authorization': `Bearer ${idToken}`
             }
           });
+  // This useEffect is no longer needed as the logic is now handled
+  // post-login and by the ProtectedRoute component.
 
           if (response.ok) {
             const userData = await response.json();
@@ -105,6 +107,18 @@ export const Landing = () => {
         }
   
         navigate('/assessment');
+        // 4. Check for personality data to decide where to navigate.
+        const meResponse = await fetch('http://127.0.0.1:8000/api/v1/users/me', {
+          method: 'GET',
+          headers,
+        });
+
+        if (meResponse.ok) {
+          const userData = await meResponse.json();
+          navigate(userData.personality ? '/dashboard' : '/assessment');
+        } else {
+          navigate('/assessment'); // Fallback to assessment on error
+        }
         resolve(result.user);
       } catch (error) {
         console.error("Google Sign-In Failed:", error);
@@ -148,8 +162,10 @@ export const Landing = () => {
                         size="lg" 
                         className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-semibold glow-primary"
                         onClick={() => navigate('/assessment')}
+                        onClick={() => navigate(user.personality ? '/dashboard' : '/assessment')}
                       >
                         Begin Your Journey
+                        {user.personality ? 'View Your Dashboard' : 'Begin Your Journey'}
                         <ArrowRight className="ml-2" size={20} />
                       </Button>
                       <p className="text-sm text-muted-foreground">Continue where you left off.</p>
