@@ -1,0 +1,1065 @@
+[
+  {
+    "title": "Full-Stack Developer (Fresher)",
+    "description": "An entry-level Full-Stack Developer who works on both the front-end (client-side) and back-end (server-side) of web applications. Assists in designing, developing, and maintaining software, from the user interface to the database.",
+    "required_skills": {
+      "technical": [
+        "JavaScript (ES6+)",
+        "HTML5 & CSS3",
+        "React.js, Angular, or Vue.js",
+        "Node.js with Express.js",
+        "Python (Django/Flask) or Java (Spring)",
+        "SQL and NoSQL Databases (e.g., MySQL, MongoDB)",
+        "REST APIs",
+        "Git and GitHub"
+      ],
+      "soft": [
+        "Problem-Solving",
+        "Team Collaboration",
+        "Adaptability and Eagerness to Learn",
+        "Communication",
+        "Time Management"
+      ],
+      "experience_prerequisites": "A portfolio of personal or academic projects demonstrating full-stack capabilities is highly preferred. One or two relevant internships are a strong plus."
+    },
+    "industry": "Information Technology",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 450000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Moderate. Often offers flexible hours and remote work options, but project deadlines and sprint cycles can lead to periods of intense work. The mental 'on' time can extend beyond standard hours.",
+    "side_hobbies": [
+      "Contributing to open-source projects",
+      "Competitive coding (HackerRank, LeetCode)",
+      "Building personal websites or mobile apps",
+      "Following tech blogs and podcasts"
+    ],
+    "work_pressure": "High mental load due to complex problem-solving and constant learning. Pressure is deadline-driven, with tight sprints and potential on-call duties for bug fixes."
+  },
+  {
+    "title": "AI/ML Engineer (Fresher)",
+    "description": "A fresher AI/ML Engineer who assists in designing, building, and deploying machine learning models. Works with large datasets to train models, performs data preprocessing, and helps integrate ML solutions into applications. Supports the ML team in research and implementation of new algorithms.",
+    "required_skills": {
+      "technical": [
+        "Python (Pandas, NumPy, Scikit-learn)",
+        "Machine Learning Frameworks (TensorFlow or PyTorch)",
+        "SQL for data extraction",
+        "Statistics and Probability",
+        "Data Structures and Algorithms",
+        "Data Preprocessing and Feature Engineering"
+      ],
+      "soft": [
+        "Analytical Thinking",
+        "Curiosity and Research Mindset",
+        "Patience and Persistence",
+        "Communication of Technical Concepts",
+        "Attention to Detail"
+      ],
+      "experience_prerequisites": "Internships focused on data science or AI are highly valued. Participation in Kaggle competitions or a strong project portfolio in machine learning is essential."
+    },
+    "industry": "Information Technology",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 800000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Good, but can be demanding during model training and experimentation phases. Requires continuous learning outside of work hours to stay updated with the fast-evolving field.",
+    "side_hobbies": [
+      "Participating in Kaggle competitions",
+      "Reading AI research papers",
+      "Solving mathematical puzzles",
+      "Automating personal tasks with scripts"
+    ],
+    "work_pressure": "Moderate to high. Pressure comes from the need for high model accuracy, handling complex datasets, and the experimental nature of the work which can lead to unpredictable challenges."
+  },
+  {
+    "title": "Data Analyst (Junior)",
+    "description": "A Junior Data Analyst responsible for collecting, processing, and performing statistical analyses of data. Helps to identify trends, patterns, and insights that inform business decisions. Creates reports and data visualizations for stakeholders.",
+    "required_skills": {
+      "technical": [
+        "Advanced Microsoft Excel (Pivot Tables, VLOOKUP)",
+        "SQL",
+        "Data Visualization tools (Tableau or Power BI)",
+        "Python or R for data analysis",
+        "Statistical Analysis",
+        "Microsoft PowerPoint for reporting"
+      ],
+      "soft": [
+        "Attention to Detail",
+        "Critical Thinking",
+        "Storytelling with Data",
+        "Business Acumen",
+        "Inquisitiveness"
+      ],
+      "experience_prerequisites": "Internships in an analytics role are beneficial. A strong portfolio of data analysis projects using public datasets is often required."
+    },
+    "industry": "Information Technology",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 950000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Generally good, with a standard 40-hour work week. Workload can increase significantly during month-end or quarter-end reporting cycles.",
+    "side_hobbies": [
+      "Solving logic puzzles and brain teasers",
+      "Following stock market or sports statistics",
+      "Creating personal data visualization projects",
+      "Playing strategy board games"
+    ],
+    "work_pressure": "Moderate. Pressure is driven by the need for accuracy in reports and tight deadlines from business stakeholders for data-driven insights."
+  },
+  {
+    "title": "Cybersecurity Analyst (Associate)",
+    "description": "An Associate Cybersecurity Analyst helps protect an organization's computer networks and systems. Monitors for security breaches, investigates violations when they occur, and assists in setting up security measures. Helps in conducting security audits and educating employees on security best practices.",
+    "required_skills": {
+      "technical": [
+        "Knowledge of Networking Concepts (TCP/IP, DNS)",
+        "Operating Systems (Windows, Linux)",
+        "Security Information and Event Management (SIEM) tools",
+        "Vulnerability Assessment Tools",
+        "Firewall and Intrusion Detection Systems",
+        "Basic Scripting (Python or Bash)"
+      ],
+      "soft": [
+        "Analytical and Investigative Mindset",
+        "High Ethical Standards",
+        "Calmness Under Pressure",
+        "Meticulous Attention to Detail",
+        "Clear Communication"
+      ],
+      "experience_prerequisites": "Certifications like CompTIA Security+ or CEH are a major advantage. Experience from cybersecurity internships or participation in Capture The Flag (CTF) competitions is highly regarded."
+    },
+    "industry": "Information Technology",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 500000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Can be challenging. While day-to-day work might follow standard hours, security incidents can require immediate attention at any time, including nights and weekends (on-call duties).",
+    "side_hobbies": [
+      "Participating in Capture The Flag (CTF) events",
+      "Building a home lab for security experiments",
+      "Bug bounty hunting",
+      "Reading about new cyber threats and vulnerabilities"
+    ],
+    "work_pressure": "High, especially during a security incident. The role carries the weight of protecting sensitive company data, and the pressure to respond quickly and effectively is immense."
+  },
+  {
+    "title": "Cloud Engineer (Associate)",
+    "description": "An Associate Cloud Engineer assists in deploying, managing, and monitoring applications on cloud platforms like AWS, Azure, or Google Cloud. Helps with cloud infrastructure setup, maintenance, and troubleshooting. Works with senior engineers to implement scalable and secure cloud solutions.",
+    "required_skills": {
+      "technical": [
+        "Cloud Platforms (AWS, Azure, or GCP)",
+        "Linux/Unix Administration",
+        "Infrastructure as Code (Terraform or CloudFormation)",
+        "Containerization (Docker, Kubernetes)",
+        "CI/CD Tools (Jenkins, GitLab CI)",
+        "Scripting (Python, Bash)"
+      ],
+      "soft": [
+        "Systemic Thinking",
+        "Problem-Solving",
+        "Collaboration",
+        "Proactiveness",
+        "Adaptability"
+      ],
+      "experience_prerequisites": "Cloud certifications (e.g., AWS Certified Cloud Practitioner, Google Associate Cloud Engineer) are highly recommended. Hands-on experience with a cloud platform through personal projects is essential."
+    },
+    "industry": "Information Technology",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 900000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Generally good, but can involve on-call rotations to handle infrastructure issues or outages that may occur outside of standard business hours.",
+    "side_hobbies": [
+      "Building home automation systems (e.g., with Raspberry Pi)",
+      "Experimenting with serverless applications",
+      "Optimizing personal cloud spending",
+      "Reading documentation for new cloud services"
+    ],
+    "work_pressure": "Moderate to high. Pressure comes from ensuring high availability and performance of cloud infrastructure. Downtime can have significant business impact, creating a stressful environment during outages."
+  },
+  {
+    "title": "Financial Analyst (Entry-Level)",
+    "description": "An entry-level Financial Analyst gathers and analyzes financial data to help the company make sound business decisions. Prepares reports on financial performance, assists in budgeting and forecasting, and builds basic financial models to support strategic planning.",
+    "required_skills": {
+      "technical": [
+        "Advanced Microsoft Excel",
+        "Financial Modeling and Valuation",
+        "Understanding of Financial Statements (P&L, Balance Sheet)",
+        "PowerPoint for presentations",
+        "Basic knowledge of accounting principles",
+        "ERP system familiarity (e.g., SAP, Oracle)"
+      ],
+      "soft": [
+        "Analytical Skills",
+        "Quantitative Aptitude",
+        "Attention to Detail",
+        "Communication",
+        "Organizational Skills"
+      ],
+      "experience_prerequisites": "Internships in finance, accounting, or a related field are almost mandatory. A strong academic background in finance, economics, or accounting is required."
+    },
+    "industry": "Financial Services",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 350000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Moderate. Corporate finance roles generally follow a 40-50 hour work week, but this balance is heavily disrupted during peak periods like month-end, quarter-end, and annual budgeting cycles, which require long hours.",
+    "side_hobbies": [
+      "Following the stock market",
+      "Reading financial news (Economic Times, Livemint)",
+      "Managing a personal investment portfolio",
+      "Participating in business case competitions"
+    ],
+    "work_pressure": "High during fiscal reporting periods. Pressure is driven by strict deadlines, the need for absolute accuracy in financial reports, and ad-hoc analysis requests from senior leadership."
+  },
+  {
+    "title": "Investment Banking Analyst (First Year)",
+    "description": "A first-year Analyst in an investment bank provides analytical support on mergers and acquisitions (M&A), capital raising, and other financial transactions. Responsibilities include building complex financial models, conducting valuation analysis, and preparing pitch books and marketing materials for clients.",
+    "required_skills": {
+      "technical": [
+        "Expert-level Financial Modeling (DCF, LBO, M&A)",
+        "Advanced Excel and PowerPoint",
+        "Valuation Techniques",
+        "Data analysis using tools like Bloomberg Terminal",
+        "Accounting and Corporate Finance Theory"
+      ],
+      "soft": [
+        "Exceptional Work Ethic",
+        "Resilience and Stress Tolerance",
+        "Extreme Attention to Detail",
+        "Communication and Interpersonal Skills",
+        "Time Management and Multitasking"
+      ],
+      "experience_prerequisites": "Prestigious internships in investment banking or related high-finance fields are a prerequisite. Must graduate from a top-tier university with a degree in finance, economics, or a quantitative field."
+    },
+    "industry": "Financial Services",
+    "experience_required": "0-1 year",
+    "avg_salary": {
+      "value": 960000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Extremely poor. 80-100 hour work weeks are the norm. Work takes absolute priority over personal life, with frequent cancellation of plans and weekend work expected as standard.",
+    "side_hobbies": [
+      "Competitive sports",
+      "Networking events",
+      "Following global financial markets",
+      "High-intensity interval training (HIIT)"
+    ],
+    "work_pressure": "Extreme and relentless. Stems from massive financial stakes on deals, tight deadlines, demanding clients, and a highly competitive internal culture. Errors have significant consequences."
+  },
+  {
+    "title": "Registered Nurse (Graduate)",
+    "description": "A newly graduated Registered Nurse provides direct patient care in settings like hospitals or clinics. Responsibilities include assessing patient conditions, administering medications, recording vital signs, collaborating with the healthcare team, and educating patients and their families on care plans.",
+    "required_skills": {
+      "technical": [
+        "Patient Assessment and Vitals Monitoring",
+        "Medication Administration",
+        "Wound Care and Dressing",
+        "IV Therapy and Phlebotomy",
+        "Electronic Health Record (EHR) Systems",
+        "Basic Life Support (BLS) and CPR"
+      ],
+      "soft": [
+        "Empathy and Compassion",
+        "Patience",
+        "Stress Management",
+        "Physical Stamina",
+        "Communication with patients and doctors"
+      ],
+      "experience_prerequisites": "Completion of a Bachelor of Science in Nursing (B.Sc. Nursing) or a Diploma in Nursing (GNM). Must be licensed by the state nursing council. Clinical rotations during the degree are the primary experience."
+    },
+    "industry": "Healthcare",
+    "experience_required": "0-1 year",
+    "avg_salary": {
+      "value": 300000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Challenging. Often involves long 12-hour shifts, including nights, weekends, and holidays. The physically and emotionally draining nature of the work makes it difficult to disconnect.",
+    "side_hobbies": [
+      "Yoga and meditation for stress relief",
+      "Volunteering for health camps",
+      "Reading medical journals or books",
+      "Gardening or spending time in nature"
+    ],
+    "work_pressure": "High. Stems from fast-paced, high-stakes environments, managing multiple patients with complex needs, and the emotional stress of dealing with illness, suffering, and death."
+  },
+  {
+    "title": "Mechanical Engineer (Graduate Trainee)",
+    "description": "A Graduate Trainee Mechanical Engineer assists in the design, development, and testing of mechanical devices and systems. Uses CAD software to create blueprints, helps analyze test results, and supports the manufacturing process under the supervision of senior engineers.",
+    "required_skills": {
+      "technical": [
+        "CAD Software (AutoCAD, SolidWorks, CATIA)",
+        "Thermodynamics and Fluid Mechanics",
+        "Engineering Design Principles",
+        "Manufacturing Processes",
+        "Finite Element Analysis (FEA) basics",
+        "Technical Drawing Interpretation"
+      ],
+      "soft": [
+        "Problem-Solving",
+        "Analytical Skills",
+        "Teamwork",
+        "Hands-on approach",
+        "Creativity and Innovation"
+      ],
+      "experience_prerequisites": "A Bachelor of Engineering (B.E.) or Bachelor of Technology (B.Tech) in Mechanical Engineering is required. Internships in a manufacturing or design environment are highly advantageous."
+    },
+    "industry": "Engineering & Manufacturing",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 350000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Generally good, with standard business hours. However, project deadlines or production issues can require overtime and weekend work.",
+    "side_hobbies": [
+      "Building and repairing machines or vehicles",
+      "3D Printing and modeling",
+      "Participating in robotics clubs",
+      "DIY projects"
+    ],
+    "work_pressure": "Moderate, with significant spikes during equipment failures or production bottlenecks. Pressure comes from the financial impact of downtime and the need for rapid, accurate problem-solving."
+  },
+  {
+    "title": "Civil Engineer (Junior Site Engineer)",
+    "description": "A Junior Site Engineer assists in overseeing construction projects on-site. Responsibilities include supervising labor, ensuring work is done according to design specifications, monitoring site safety, and helping with project documentation and reporting to the Construction Manager.",
+    "required_skills": {
+      "technical": [
+        "Site Supervision and Management",
+        "Reading and Interpreting Blueprints",
+        "AutoCAD",
+        "Surveying and Leveling",
+        "Quality Control and Material Testing",
+        "Knowledge of Safety Regulations"
+      ],
+      "soft": [
+        "Leadership and People Management",
+        "Problem-Solving on-the-fly",
+        "Stress Tolerance",
+        "Communication",
+        "Negotiation skills"
+      ],
+      "experience_prerequisites": "A Bachelor of Engineering (B.E.) or Bachelor of Technology (B.Tech) in Civil Engineering. Internships on construction sites are crucial for practical experience."
+    },
+    "industry": "Construction",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 300000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Poor. Work is primarily on-site and follows construction timelines, which often means long hours, six-day work weeks, and working in challenging weather conditions.",
+    "side_hobbies": [
+      "Outdoor activities like trekking and hiking",
+      "Team sports",
+      "DIY home improvement projects",
+      "Photography"
+    ],
+    "work_pressure": "High. Driven by tight project deadlines, budget constraints, and the high cost of on-site errors. Responsible for the safety of workers and the quality of construction."
+  },
+  {
+    "title": "Digital Marketing Executive",
+    "description": "An entry-level Digital Marketing Executive helps plan, execute, and optimize online marketing campaigns. Assists with SEO, SEM, social media marketing, and email marketing. Analyzes campaign performance data and contributes to marketing strategy.",
+    "required_skills": {
+      "technical": [
+        "SEO/SEM tools (e.g., Google Analytics, SEMrush)",
+        "Social Media Management platforms (e.g., Hootsuite)",
+        "Email Marketing tools (e.g., Mailchimp)",
+        "Content Management Systems (e.g., WordPress)",
+        "Data Analysis",
+        "Ad Campaign Management (Google Ads, Facebook Ads)"
+      ],
+      "soft": [
+        "Creativity",
+        "Analytical Skills",
+        "Adaptability",
+        "Communication",
+        "Customer-centric mindset"
+      ],
+      "experience_prerequisites": "Internships in digital marketing are highly valuable. A personal blog or a successfully managed social media page can serve as a strong portfolio piece. Certifications from Google or HubSpot are a plus."
+    },
+    "industry": "Media & Marketing",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 350000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Moderate. The field is fast-paced and 'always on,' which can lead to checking analytics or social media outside of work hours. However, many roles offer remote work flexibility.",
+    "side_hobbies": [
+      "Managing a personal blog or YouTube channel",
+      "Social media content creation",
+      "Graphic design or video editing",
+      "Following marketing trends and case studies"
+    ],
+    "work_pressure": "Moderate to high. Pressure is driven by the need to meet campaign targets (leads, conversions, engagement) and the constant need to adapt to changing algorithms and market trends."
+  },
+  {
+    "title": "Content Writer",
+    "description": "A Content Writer creates engaging and informative written material for websites, blogs, social media, and marketing campaigns. Researches industry-related topics and produces well-structured drafts. Works with marketing teams to ensure content is aligned with brand voice and SEO strategies.",
+    "required_skills": {
+      "technical": [
+        "Excellent Grammar and Vocabulary",
+        "SEO Writing Principles",
+        "Content Management Systems (WordPress)",
+        "Research Skills",
+        "Basic knowledge of HTML for formatting",
+        "Familiarity with tools like Grammarly"
+      ],
+      "soft": [
+        "Creativity",
+        "Adaptability of Writing Style",
+        "Time Management and meeting Deadlines",
+        "Attention to Detail",
+        "Curiosity"
+      ],
+      "experience_prerequisites": "A strong portfolio of writing samples (blogs, articles, etc.) is essential. An internship with a content or marketing agency is beneficial. A degree in English, Journalism, or Communications is preferred."
+    },
+    "industry": "Media & Marketing",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 300000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Good. Many content writing roles are freelance or remote, offering significant flexibility. However, deadlines can be tight, requiring focused work.",
+    "side_hobbies": [
+      "Blogging on a personal niche",
+      "Creative writing (fiction, poetry)",
+      "Reading voraciously across different genres",
+      "Journaling"
+    ],
+    "work_pressure": "Moderate. Pressure comes from meeting deadlines, producing high-quality, original content consistently, and adapting writing style to different audiences and platforms."
+  },
+  {
+    "title": "High School Science Teacher (Fresher)",
+    "description": "A newly qualified High School Teacher responsible for teaching science subjects (Physics, Chemistry, Biology) to students. Creates lesson plans, delivers lectures, conducts lab experiments, grades assignments, and manages the classroom environment.",
+    "required_skills": {
+      "technical": [
+        "Deep Subject Matter Expertise (Physics, Chemistry, Biology)",
+        "Lesson Planning and Curriculum Design",
+        "Classroom Management Techniques",
+        "Lab Safety and Experiment Conduction",
+        "Student Assessment and Grading"
+      ],
+      "soft": [
+        "Patience",
+        "Public Speaking and Communication",
+        "Empathy",
+        "Organizational Skills",
+        "Conflict Resolution"
+      ],
+      "experience_prerequisites": "A B.Ed. degree is mandatory, which includes teaching practice internships. No prior full-time job experience is required."
+    },
+    "industry": "Educational Services",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 300000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Poor. Often perceived as having short hours, but there is a significant 'hidden workload' of lesson planning, grading, and administrative tasks that consumes evenings and weekends.",
+    "side_hobbies": [
+      "Reading non-fiction and science books",
+      "Volunteering or mentoring",
+      "Public speaking (e.g., Toastmasters)",
+      "Conducting science experiments at home"
+    ],
+    "work_pressure": "High. Stems from the pressure to achieve good academic results from students, managing large class sizes, and the high emotional labor involved in student well-being and parent communication."
+  },
+  {
+    "title": "Junior Legal Associate",
+    "description": "A Junior Legal Associate assists senior lawyers with legal research, drafting documents, and preparing for cases. Responsibilities include reviewing case files, preparing legal briefs and contracts, and maintaining communication with clients under supervision.",
+    "required_skills": {
+      "technical": [
+        "Legal Research (using databases like Manupatra, SCC Online)",
+        "Legal Drafting (contracts, plaints, notices)",
+        "Knowledge of Civil and Criminal Procedure",
+        "Case Law Analysis",
+        "Microsoft Office Suite"
+      ],
+      "soft": [
+        "Analytical and Logical Reasoning",
+        "Meticulous Attention to Detail",
+        "Strong Communication and Articulation",
+        "Discretion and Confidentiality",
+        "Resilience"
+      ],
+      "experience_prerequisites": "A Bachelor of Laws (LLB) degree is mandatory. Internships with law firms or under a senior advocate during the degree are crucial for practical exposure."
+    },
+    "industry": "Legal Services",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 300000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Challenging, especially in corporate law firms. Long hours are common, particularly when preparing for case deadlines or deal closures.",
+    "side_hobbies": [
+      "Debating and moot court competitions",
+      "Reading legal and historical non-fiction",
+      "Following current affairs and policy changes",
+      "Writing articles for legal blogs"
+    ],
+    "work_pressure": "High. Driven by strict court deadlines, high client expectations, and the need for meticulous accuracy in all legal work. The consequences of errors can be severe."
+  },
+
+
+  {
+    "title": "UX/UI Designer (Junior)",
+    "description": "A Junior UX/UI Designer who focuses on creating user-centered designs for websites and mobile applications. Assists in conducting user research, creating wireframes and prototypes, and designing visually appealing and intuitive user interfaces under the guidance of senior designers.",
+    "required_skills": {
+      "technical": [
+        "Design Tools (Figma, Sketch, Adobe XD)",
+        "Wireframing and Prototyping",
+        "Understanding of User Research methods",
+        "Basic knowledge of HTML/CSS",
+        "Creating User Flows and Journey Maps",
+        "Knowledge of Design Systems"
+      ],
+      "soft": [
+        "Empathy for the user",
+        "Creativity",
+        "Collaboration with developers and product managers",
+        "Communication of design concepts",
+        "Attention to Detail"
+      ],
+      "experience_prerequisites": "A strong, well-documented design portfolio is mandatory. Internships in a product or design company are extremely important."
+    },
+    "industry": "Design / Information Technology",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 480000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Moderate. Workload is often project-based and can become intense during deadlines and product launch cycles. Flexible hours are common.",
+    "side_hobbies": [
+      "Digital illustration or graphic design",
+      "Reading about psychology and human behavior",
+      "Photography (for composition and aesthetics)",
+      "Critiquing and redesigning existing apps for fun"
+    ],
+    "work_pressure": "Moderate to high. Pressure comes from tight deadlines, the need to justify design decisions with research, and incorporating critical feedback from multiple stakeholders."
+  },
+  {
+    "title": "Business Development Executive",
+    "description": "An entry-level sales professional focused on generating new leads and business opportunities. Responsibilities include researching potential clients, initiating contact through cold calls and emails, setting up meetings for the sales team, and achieving weekly/monthly lead generation targets.",
+    "required_skills": {
+      "technical": [
+        "CRM Software (Salesforce, HubSpot, Zoho)",
+        "Microsoft Office Suite (Excel, PowerPoint)",
+        "Lead Generation Tools",
+        "LinkedIn Sales Navigator",
+        "Presentation Skills"
+      ],
+      "soft": [
+        "Excellent Communication and Persuasion",
+        "Resilience and ability to handle rejection",
+        "Target-Oriented Mindset",
+        "Networking Skills",
+        "Self-Motivation"
+      ],
+      "experience_prerequisites": "An MBA or BBA is preferred but not mandatory. Any internship with a sales or marketing component is a strong advantage. Demonstrable confidence is key."
+    },
+    "industry": "Sales & Business Development (across all sectors)",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 360000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Poor to moderate. Often requires working beyond standard hours to meet targets or connect with clients across time zones. Can involve travel.",
+    "side_hobbies": [
+      "Public Speaking (Toastmasters)",
+      "Networking at industry events",
+      "Competitive sports",
+      "Reading books on sales and negotiation"
+    ],
+    "work_pressure": "Very high. The role is heavily performance-based with constant pressure to meet strict weekly and monthly targets. Job security is often tied directly to performance."
+  },
+  {
+    "title": "Supply Chain Analyst (Associate)",
+    "description": "An Associate Supply Chain Analyst helps in analyzing and optimizing an organization's supply chain processes. Assists with demand forecasting, inventory management, logistics coordination, and procurement data analysis to improve efficiency and reduce costs.",
+    "required_skills": {
+      "technical": [
+        "Advanced Microsoft Excel",
+        "ERP Systems (SAP, Oracle)",
+        "Data Analysis and Interpretation",
+        "SQL for querying databases",
+        "Knowledge of logistics and inventory management",
+        "Basic Data Visualization"
+      ],
+      "soft": [
+        "Analytical Thinking",
+        "Problem-Solving",
+        "Strong Organizational Skills",
+        "Negotiation",
+        "Attention to Detail"
+      ],
+      "experience_prerequisites": "A degree in Supply Chain Management, Operations, or Industrial Engineering is highly preferred. Internships in e-commerce, manufacturing, or logistics companies are beneficial."
+    },
+    "industry": "Logistics & Supply Chain",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 450000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Good. Typically follows standard business hours, but can become demanding during peak seasons (e.g., festive sales) or when managing supply chain disruptions.",
+    "side_hobbies": [
+      "Playing strategy and resource management games",
+      "Following global trade and economic news",
+      "Building complex models (e.g., Lego Technic)",
+      "Optimizing personal travel routes or schedules"
+    ],
+    "work_pressure": "Moderate. Pressure mounts when dealing with unexpected disruptions (e.g., shipping delays, supplier issues) that have significant financial impact."
+  },
+  {
+    "title": "HR Executive (Trainee)",
+    "description": "A trainee in the Human Resources department who provides administrative support across various HR functions. Assists with recruitment (scheduling interviews), onboarding new employees, maintaining employee records, and helping with payroll processing and compliance.",
+    "required_skills": {
+      "technical": [
+        "HRIS (Human Resource Information System) software",
+        "Microsoft Office Suite",
+        "Familiarity with Job Portals (Naukri, LinkedIn)",
+        "Basic knowledge of Indian labor laws",
+        "Documentation and Record-Keeping"
+      ],
+      "soft": [
+        "Interpersonal Skills",
+        "Communication",
+        "Empathy and Discretion",
+        "Organizational Skills",
+        "Problem-Solving"
+      ],
+      "experience_prerequisites": "An MBA or postgraduate diploma in HR is almost always required. HR internships are crucial for getting an entry-level position."
+    },
+    "industry": "Human Resources (across all sectors)",
+    "experience_required": "0-1 year",
+    "avg_salary": {
+      "value": 320000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Good. Usually follows a standard 9-to-5 schedule. Workload can spike during hiring drives, appraisal cycles, or when managing employee grievances.",
+    "side_hobbies": [
+      "Volunteering for social causes",
+      "Reading about organizational psychology",
+      "Event planning and organization",
+      "Mentoring juniors"
+    ],
+    "work_pressure": "Moderate. Pressure comes from handling sensitive employee information, mediating conflicts, and meeting tight hiring deadlines."
+  },
+  {
+    "title": "Management Consultant (Analyst)",
+    "description": "An entry-level Analyst at a consulting firm who works in teams to help clients solve complex business problems. Responsibilities include conducting research, gathering and analyzing large amounts of data, building financial models, and preparing presentations for client leadership.",
+    "required_skills": {
+      "technical": [
+        "Advanced Data Analysis (Excel, SQL)",
+        "Expert-level Presentation Skills (PowerPoint)",
+        "Financial Modeling",
+        "Market Research",
+        "Problem Structuring (Hypothesis-based)"
+      ],
+      "soft": [
+        "Exceptional Problem-Solving and Analytical Skills",
+        "Structured Communication",
+        "Poise and Professionalism",
+        "Teamwork",
+        "High degree of adaptability and resilience"
+      ],
+      "experience_prerequisites": "Graduation from a top-tier undergraduate college (IITs, IIMs, SRCC, etc.) is a near-universal requirement. Multiple prestigious internships and strong case study preparation are mandatory."
+    },
+    "industry": "Management Consulting",
+    "experience_required": "0-1 year",
+    "avg_salary": {
+      "value": 1500000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Very Poor. 60-80 hour work weeks are standard. Frequent travel and tight project deadlines mean work consistently takes precedence over personal life.",
+    "side_hobbies": [
+      "Case study competitions",
+      "Debating or Model UN",
+      "Networking",
+      "Following business and strategy journals"
+    ],
+    "work_pressure": "Very High and constant. Stems from demanding clients, tight deadlines for high-stakes projects, a competitive 'up-or-out' culture, and the need to quickly master new industries."
+  },
+  {
+    "title": "Hotel Operations Trainee",
+    "description": "A management trainee at a hotel, rotating through various departments like Front Office, Housekeeping, and Food & Beverage. Learns the fundamentals of hotel operations, guest services, and staff management with the goal of becoming a future manager.",
+    "required_skills": {
+      "technical": [
+        "Property Management Systems (PMS) like Opera",
+        "Guest Relations Management",
+        "Inventory and Cost Control (F&B)",
+        "Event Coordination Basics",
+        "Health and Safety Standards"
+      ],
+      "soft": [
+        "Excellent Customer Service Orientation",
+        "Poise and Professionalism under pressure",
+        "Problem-Solving",
+        "Teamwork and Leadership potential",
+        "Strong Communication"
+      ],
+      "experience_prerequisites": "A degree in Hotel Management (BHM) is mandatory. The degree program itself includes extensive industrial training (internships) which is the core prerequisite."
+    },
+    "industry": "Hospitality",
+    "experience_required": "0-1 year",
+    "avg_salary": {
+      "value": 280000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Poor. Involves long hours and shift work, including nights, weekends, and holidays, as hotels operate 24/7. It's a physically demanding role.",
+    "side_hobbies": [
+      "Learning new languages",
+      "Exploring different cuisines and cultures",
+      "Travel and tourism",
+      "Volunteering at events"
+    ],
+    "work_pressure": "High. Pressure is driven by the need to ensure exceptional guest satisfaction in a fast-paced environment. Dealing with difficult guests and managing operational issues in real-time is stressful."
+  },
+  {
+    "title": "Biotechnologist (Research Trainee)",
+    "description": "An entry-level scientist working in a research and development lab. Assists senior scientists in conducting experiments, preparing solutions and cultures, operating lab equipment (like PCR machines, spectrometers), and meticulously documenting procedures and results.",
+    "required_skills": {
+      "technical": [
+        "Aseptic Techniques",
+        "Molecular Biology Techniques (PCR, Electrophoresis)",
+        "Cell Culture Maintenance",
+        "Operating Laboratory Equipment",
+        "Data Recording and Analysis",
+        "Adherence to Good Laboratory Practices (GLP)"
+      ],
+      "soft": [
+        "Patience and Perseverance",
+        "Meticulous Attention to Detail",
+        "Methodical Approach",
+        "Analytical Thinking",
+        "Teamwork in a lab setting"
+      ],
+      "experience_prerequisites": "A Master's degree (M.Sc./M.Tech) in Biotechnology, Microbiology, or a related life sciences field is often required. Hands-on experience from master's thesis projects or internships is critical."
+    },
+    "industry": "Pharmaceuticals & Biotechnology",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 350000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Moderate. While day-to-day work follows a schedule, experiments can often run for long durations, requiring occasional work outside standard hours to monitor progress.",
+    "side_hobbies": [
+      "Reading scientific journals and publications",
+      "Gardening or brewing (as a form of applied biology)",
+      "Scientific illustration",
+      "Volunteering for science outreach programs"
+    ],
+    "work_pressure": "Moderate. Pressure comes from the need for precision and accuracy, as minor errors can ruin experiments. The slow, often repetitive nature of research can be mentally taxing."
+  },
+  {
+    "title": "Associate Product Manager (APM)",
+    "description": "An entry-level role in product management, where the individual supports a Product Manager in defining and delivering a product. Helps with writing user stories, managing the product backlog, conducting market research, and coordinating with engineering, design, and marketing teams.",
+    "required_skills": {
+      "technical": [
+        "Agile/Scrum Methodologies",
+        "User Story Writing",
+        "Product Roadmapping Tools (Jira, Trello)",
+        "Data Analysis to inform decisions",
+        "Market Research and Competitor Analysis",
+        "Wireframing concepts"
+      ],
+      "soft": [
+        "Communication and Influencing without authority",
+        "User Empathy",
+        "Prioritization",
+        "Problem-Solving",
+        "Business Acumen"
+      ],
+      "experience_prerequisites": "Highly competitive role. A degree in Computer Science or Business is common. Internships in product, business analysis, or even founding a small startup are huge advantages."
+    },
+    "industry": "Information Technology",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 1100000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Moderate to challenging. The role is highly cross-functional, requiring constant communication and context-switching. The 'ownership' mentality can lead to working beyond standard hours.",
+    "side_hobbies": [
+      "Deconstructing and analyzing popular apps",
+      "Reading tech and business blogs (e.g., Stratechery)",
+      "Side projects or building no-code applications",
+      "Attending tech meetups and hackathons"
+    ],
+    "work_pressure": "High. The APM is at the center of many teams and is responsible for product outcomes without direct authority. Pressure comes from managing stakeholder expectations, making data-backed decisions, and hitting launch deadlines."
+  },
+  {
+    "title": "Probationary Officer (Bank PO)",
+    "description": "A management trainee in a public or private sector bank. Undergoes intensive training in various aspects of branch banking, including general operations, customer service, loan processing, and compliance, with a clear path to becoming an Assistant Manager.",
+    "required_skills": {
+      "technical": [
+        "Core Banking Software (CBS) like Finacle or BaNCS",
+        "Knowledge of Banking Regulations (RBI Guidelines)",
+        "Loan Processing and Credit Appraisal Basics",
+        "KYC and Anti-Money Laundering (AML) Norms",
+        "Microsoft Office Suite"
+      ],
+      "soft": [
+        "Customer Service Orientation",
+        "High degree of Integrity and Honesty",
+        "Clear Communication",
+        "Sales Acumen (for cross-selling products)",
+        "Attention to Detail"
+      ],
+      "experience_prerequisites": "A bachelor's degree in any discipline. Must clear a highly competitive national-level examination (e.g., IBPS PO, SBI PO) followed by an interview."
+    },
+    "industry": "Banking & Financial Services",
+    "experience_required": "0 years",
+    "avg_salary": {
+      "value": 650000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Moderate. Generally fixed working hours, but can be stressful during month-end and year-end closing. Postings can be in rural or remote areas, impacting personal life.",
+    "side_hobbies": [
+      "Reading newspapers and following economic news",
+      "Preparing for professional banking certifications (JAIIB/CAIIB)",
+      "Community volunteering",
+      "Personal finance management"
+    ],
+    "work_pressure": "High. Pressure is driven by targets for selling financial products (loans, insurance), ensuring regulatory compliance, and managing customer grievances. The responsibility of handling public funds is immense."
+  },
+  {
+    "title": "Automotive Design Engineer (Trainee)",
+    "description": "An entry-level engineer in an automotive company who assists in the design and development of vehicle components and systems. Uses CAD software to create 3D models and 2D drawings, supports simulation and analysis, and collaborates with manufacturing teams.",
+    "required_skills": {
+      "technical": [
+        "CAD Software (CATIA is industry standard)",
+        "Geometric Dimensioning & Tolerancing (GD&T)",
+        "Understanding of Automotive Materials",
+        "Basics of FEA and CFD analysis",
+        "Knowledge of Manufacturing Processes (e.g., casting, machining)"
+      ],
+      "soft": [
+        "Analytical Problem-Solving",
+        "Innovation and Creativity",
+        "Teamwork and Collaboration",
+        "Precision and thoroughness",
+        "Technical Communication"
+      ],
+      "experience_prerequisites": "A B.E. or B.Tech in Mechanical, Automotive, or Production Engineering. Active participation in collegiate automotive design competitions like BAJA SAE or Formula Student is a huge advantage."
+    },
+    "industry": "Automotive / Manufacturing",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 400000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Good. Typically follows a standard work week. Hours can become long and intense during critical phases of a new product launch or a model refresh cycle.",
+    "side_hobbies": [
+      "Following motorsports (Formula 1, MotoGP)",
+      "Working on personal car or motorcycle projects",
+      "Building scale models or 3D printing",
+      "Reading automotive magazines and blogs"
+    ],
+    "work_pressure": "Moderate. Stems from the need for absolute precision in design for safety and performance, tight project timelines, and constant pressure to innovate while controlling costs."
+  },
+  {
+    "title": "Journalist / Reporter (Trainee)",
+    "description": "An aspiring journalist at a media house (print, broadcast, or digital). Gathers information, conducts interviews, and writes news reports on assigned beats like local events or crime. Assists senior reporters with research and fact-checking.",
+    "required_skills": {
+      "technical": [
+        "News Writing and Reporting (AP Style)",
+        "Interviewing Techniques",
+        "Research and Fact-Checking",
+        "Content Management Systems (CMS) for digital publishing",
+        "Basic Photography/Videography with a smartphone"
+      ],
+      "soft": [
+        "Inherent Curiosity",
+        "Excellent Communication and Storytelling",
+        "Ethical Integrity",
+        "Resilience and thick skin",
+        "Ability to work under extreme deadlines"
+      ],
+      "experience_prerequisites": "A degree in Journalism or Mass Communication is standard. A portfolio of published work (even on a blog or college paper) is essential."
+    },
+    "industry": "Media & Entertainment",
+    "experience_required": "0-1 year",
+    "avg_salary": {
+      "value": 280000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Poor. The news cycle is 24/7. This role involves irregular hours, working on weekends and holidays, and being ready to travel at a moment's notice to cover a story.",
+    "side_hobbies": [
+      "Avidly consuming news from various sources",
+      "Reading non-fiction and biographies",
+      "Documentary photography or filmmaking",
+      "Networking and building sources"
+    ],
+    "work_pressure": "Very High. Driven by relentless, hourly deadlines, the pressure to break stories first, the need for 100% accuracy, and the emotional toll of covering challenging events."
+  },
+  {
+    "title": "Network Operations Center (NOC) Engineer (Junior)",
+    "description": "A junior engineer working in a 24/7 operations center to monitor a company's network infrastructure. Responsible for identifying and responding to alarms, performing initial troubleshooting, creating trouble tickets, and escalating issues to senior engineers.",
+    "required_skills": {
+      "technical": [
+        "Networking Fundamentals (TCP/IP, OSI Model)",
+        "Cisco IOS / Junos basics",
+        "Network Monitoring Tools (e.g., Nagios, SolarWinds)",
+        "Troubleshooting Methodologies",
+        "Ticketing Systems (e.g., ServiceNow, Jira)"
+      ],
+      "soft": [
+        "Logical Thinking",
+        "Calmness Under Pressure",
+        "Clear Communication (verbal and written)",
+        "Process-Oriented",
+        "Attention to Detail"
+      ],
+      "experience_prerequisites": "A B.E. or B.Tech in Computer Science or ECE is required. Certifications like CCNA are a massive advantage and often a prerequisite."
+    },
+    "industry": "Telecommunications / Information Technology",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 380000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Challenging. This is a shift-based job that includes working nights, weekends, and holidays to ensure 24/7 network uptime. This can disrupt social and family life.",
+    "side_hobbies": [
+      "Building a home computer network or lab",
+      "Participating in online networking forums",
+      "Studying for advanced network certifications (CCNP)",
+      "Playing online games (which rely on low latency)"
+    ],
+    "work_pressure": "High during network outages. The primary pressure is to restore service as quickly as possible, as network downtime can cost a company millions. The role requires quick, accurate decision-making."
+  },
+  {
+    "title": "Cabin Crew (Flight Attendant)",
+    "description": "A service and safety professional onboard commercial aircraft. Responsible for ensuring passenger safety through pre-flight checks and emergency procedures, as well as providing comfort and service, including serving meals and attending to passenger needs.",
+    "required_skills": {
+      "technical": [
+        "Safety and Emergency Procedures (SEP)",
+        "First Aid, CPR, and AED operation",
+        "In-flight Service Protocols",
+        "Conflict Resolution and De-escalation",
+        "Aircraft-specific knowledge (e.g., door operations)"
+      ],
+      "soft": [
+        "Exceptional Poise and Professionalism",
+        "Clear and Calm Communication",
+        "Teamwork",
+        "Empathy and Patience",
+        "Physical Stamina and Fitness"
+      ],
+      "experience_prerequisites": "Completion of 10+2 (High School). Must meet specific physical criteria (height, BMI, vision) and clear multiple rounds of interviews. No prior experience needed, as extensive training is provided by the airline."
+    },
+    "industry": "Aviation / Travel & Tourism",
+    "experience_required": "0 years",
+    "avg_salary": {
+      "value": 450000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Poor and non-traditional. The job involves highly irregular schedules, constant travel across time zones (jet lag), and significant time away from home, including on weekends and festivals.",
+    "side_hobbies": [
+      "Travel blogging or vlogging",
+      "Fitness and wellness routines",
+      "Learning new languages and cultures",
+      "Exploring new cities during layovers"
+    ],
+    "work_pressure": "High. The ultimate responsibility for hundreds of passengers' safety in an emergency creates immense underlying pressure. This is coupled with the stress of managing difficult passengers and medical situations at 35,000 feet."
+  },
+  {
+    "title": "Instructional Designer (Associate)",
+    "description": "An entry-level professional in the EdTech space who designs and develops engaging digital learning materials. Collaborates with subject matter experts (SMEs) to structure content, writes scripts for videos, and builds interactive courses and assessments.",
+    "required_skills": {
+      "technical": [
+        "Learning Theories (ADDIE, Bloom's Taxonomy)",
+        "Content Authoring Tools (Articulate Storyline, Adobe Captivate)",
+        "Learning Management System (LMS) familiarity",
+        "Scriptwriting and Storyboarding",
+        "Basic Video and Graphic Editing"
+      ],
+      "soft": [
+        "Creativity",
+        "Empathy for the learner",
+        "Collaboration with SMEs",
+        "Project Management",
+        "Strong Written Communication"
+      ],
+      "experience_prerequisites": "A degree in Education, Communications, or Psychology is beneficial. A portfolio showcasing designed courses or learning modules is essential."
+    },
+    "industry": "Education Technology (EdTech)",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 500000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Good. Most roles are project-based with clear timelines and standard working hours. Remote work options are very common in this field.",
+    "side_hobbies": [
+      "Creating educational content for YouTube or blogs",
+      "Studying principles of game design (for gamification)",
+      "Reading about cognitive science and how people learn",
+      "Taking various online courses to analyze their design"
+    ],
+    "work_pressure": "Moderate. Pressure comes from deadlines to launch new courses and the challenge of making complex or dry subject matter engaging and effective for a diverse audience."
+  },
+  {
+    "title": "Category Management Executive",
+    "description": "An entry-level role in an e-commerce or retail company. Assists a Category Manager in managing a specific group of products. Responsibilities include analyzing sales data, managing vendor relationships, planning promotions, and ensuring product availability.",
+    "required_skills": {
+      "technical": [
+        "Microsoft Excel (Advanced: Pivot Tables, Lookups)",
+        "Data Analysis and Interpretation",
+        "Vendor Management",
+        "Inventory Planning",
+        "Market Trend Analysis"
+      ],
+      "soft": [
+        "Strong Analytical Skills",
+        "Negotiation",
+        "Business Acumen",
+        "Communication",
+        "Organizational Skills"
+      ],
+      "experience_prerequisites": "An MBA or BBA is highly preferred. Internships in retail, e-commerce, or business analysis provide a significant edge."
+    },
+    "industry": "E-commerce / Retail",
+    "experience_required": "0-2 years",
+    "avg_salary": {
+      "value": 550000,
+      "currency": "INR",
+      "period": "annum"
+    },
+    "work_life_balance": "Moderate. The workload can become very heavy during major sale events like Diwali or Black Friday, often requiring long hours and weekend work.",
+    "side_hobbies": [
+      "Following retail and e-commerce trends",
+      "Analyzing pricing of products online",
+      "Reading business case studies",
+      "Exploring niche product markets"
+    ],
+    "work_pressure": "High. The role is target-driven, with direct responsibility for the sales and profitability (P&L) of a product category. Pressure comes from meeting sales targets, managing inventory, and competing with other platforms."
+  }
+]
