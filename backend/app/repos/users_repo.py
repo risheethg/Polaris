@@ -47,7 +47,7 @@ class UserRepository:
         user_doc_ref = db.collection("users").document(uid)
         
         # update() merges data into an existing document
-        await user_doc_ref.update(data_to_update)
+        user_doc_ref.update(data_to_update)
         
         updated_user = await self.get(uid)
         return updated_user

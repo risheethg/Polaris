@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { useState, useEffect } from 'react';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { GlassCard } from '@/components/GlassCard';
-import { PolarisLogo } from '@/components/PolarisLogo';
-import { ArrowRight, Loader2, LogOut, Navigation, Sparkles, Target } from 'lucide-react';
+import { PolarisLogo } from '@/components/PolarisLogo'; // Keep for hero
+import { ArrowRight, Loader2, Navigation, Sparkles, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '@/firebase';
 import { toast } from 'sonner';
 
@@ -24,6 +24,33 @@ export const Landing = () => {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [isSigningIn, setIsSigningIn] = useState(false);
+
+  useEffect(() => {
+    const checkAssessmentStatus = async () => {
+      // Only run check if user is loaded and authenticated
+      if (user && !loading) {
+        try {
+          const idToken = await user.getIdToken();
+          const response = await fetch('http://127.0.0.1:8000/api/v1/users/me', {
+            headers: {
+              'Authorization': `Bearer ${idToken}`
+            }
+          });
+
+          if (response.ok) {
+            const userData = await response.json();
+            // If user has a personality vector, they've completed the assessment
+            if (userData.personality) {
+              navigate('/dashboard');
+            }
+          }
+        } catch (error) {
+          console.error("Failed to check user assessment status:", error);
+        }
+      }
+    };
+    checkAssessmentStatus();
+  }, [user, loading, navigate]);
 
   const features = [
     {
@@ -94,44 +121,11 @@ export const Landing = () => {
     });
   };
 
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-      toast.success("You have been signed out.");
-    } catch (error) {
-      console.error("Sign Out Failed:", error);
-      toast.error("Could not sign you out. Please try again.");
-    }
-  };
-
   return (
-    <div className="min-h-screen relative overflow-hidden bg-background">
-      
-      <div className="relative z-10 min-h-screen flex flex-col">
-        {/* Header */}
-        <header className="p-6">
-          <nav className="max-w-7xl mx-auto flex justify-between items-center">
-            <PolarisLogo size="sm" />
-            <div className="space-x-4">
-              <Button variant="ghost" className="text-foreground hover:text-primary">
-                About {user?.displayName && `| Welcome, ${user.displayName.split(' ')[0]}`}
-              </Button>
-              {user && (
-                <Button 
-                  variant="outline" 
-                  className="border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
-                  onClick={handleSignOut}
-                >
-                  <LogOut className="mr-2" size={16} />
-                  Sign Out
-                </Button>
-              )}
-            </div>
-          </nav>
-        </header>
-
-        {/* Hero Section */}
-        <main className="flex-1 flex items-center justify-center px-6">
+    <div className="flex flex-col">
+      {/* Hero Section */}
+      <div className="flex-1 flex items-center justify-center px-6 py-16 md:py-24">
+        <div className="container mx-auto">
           <div className="max-w-6xl mx-auto text-center space-y-12">
             {/* Hero Content */}
             <div className="space-y-8 reveal">
@@ -195,13 +189,13 @@ export const Landing = () => {
               ))}
             </div>
           </div>
-        </main>
-
-        {/* Footer */}
-        <footer className="p-6 text-center text-muted-foreground">
-          <p>&copy; 2024 Polaris. Guiding your career journey through the stars.</p>
-        </footer>
+        </div>
       </div>
+
+      {/* Footer */}
+      <footer className="p-6 text-center text-muted-foreground">
+        <p>&copy; 2024 Polaris. Guiding your career journey through the stars.</p>
+      </footer>
     </div>
   );
 };
