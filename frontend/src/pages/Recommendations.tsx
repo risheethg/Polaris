@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDebug } from '@/context/DebugContext';
+import { motion } from 'framer-motion';
+import { GlassCard } from '@/components/GlassCard';
+import { Badge } from '@/components/ui/badge';
+import { BrainCircuit, Check, Star, TrendingUp } from 'lucide-react';
 
 interface JobRecommendation {
   id: string;
@@ -55,50 +59,61 @@ const Recommendations: React.FC = () => {
   }, [isDebugMode, cluster]);
 
   return (
-    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-3xl font-extrabold text-gray-900">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+      className="flex flex-col"
+    >
+      <div className="flex-1 flex p-6">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-heading font-bold mb-2">
             Top Job Recommendations
-          </h1>
-        </div>
-        <p className="text-lg text-gray-600 mb-8">
-          Based on your skills and personality profile for the <span className="font-semibold text-indigo-700">{cluster}</span> cluster.
-        </p>
-
-        {loading ? (
-          <div className="text-center">
-            <p className="text-gray-700">Finding the best jobs for you...</p>
-            {/* You can add a spinner here */}
+            </h1>
+            <p className="text-lg text-muted-foreground">
+              Based on your skills and personality profile for the <span className="font-semibold text-primary">{cluster}</span> cluster.
+            </p>
           </div>
-        ) : recommendations.length > 0 ? (
-          <div className="bg-white shadow overflow-hidden sm:rounded-md">
-            <ul className="divide-y divide-gray-200">
-              {recommendations.map((job) => (
-                <li key={job.id} className="px-4 py-4 sm:px-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-lg font-medium text-indigo-600 truncate">{job.title}</p>
-                      <p className="text-sm text-gray-500">{job.company}</p>
+
+          {loading ? (
+            <div className="text-center">
+              <p className="text-muted-foreground">Finding the best jobs for you...</p>
+              {/* You can add a spinner here */}
+            </div>
+          ) : recommendations.length > 0 ? (
+            <div className="space-y-4">
+              {recommendations.map((job, index) => (
+                <GlassCard key={job.id} hover className="p-6">
+                  <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+                    <div className="flex-grow">
+                      <h3 className="text-2xl font-heading font-bold text-primary">{job.title}</h3>
+                      <p className="text-md text-muted-foreground mt-1">{job.company}</p>
                     </div>
-                    <div className="ml-4 text-right">
-                      <p className="text-sm font-semibold text-gray-900">
-                        Skill Match: {(job.skillMatch * 100).toFixed(0)}%
-                      </p>
-                      <p className="text-xs text-gray-500 mt-1">
-                        Personality Fit: {job.personalityFit}
-                      </p>
+                    <div className="flex flex-col sm:items-end gap-2 w-full sm:w-auto">
+                      <Badge variant="secondary" className="flex items-center gap-2 text-md px-3 py-1">
+                        <Check size={16} className="text-green-400" />
+                        Skill Match: <span className="font-bold">{(job.skillMatch * 100).toFixed(0)}%</span>
+                      </Badge>
+                      <Badge variant="outline" className="flex items-center gap-2 text-md px-3 py-1">
+                        <BrainCircuit size={16} className="text-blue-400" />
+                        Personality: <span className="font-bold">{job.personalityFit}</span>
+                      </Badge>
                     </div>
                   </div>
-                </li>
+                </GlassCard>
               ))}
-            </ul>
-          </div>
-        ) : (
-          <p className="text-center text-gray-500">No recommendations found. The backend might not be ready yet.</p>
-        )}
+            </div>
+          ) : (
+            <GlassCard className="text-center p-8 space-y-4">
+              <Star className="mx-auto text-muted-foreground" size={48} />
+              <p className="text-muted-foreground">No recommendations found. The backend might not be ready yet.</p>
+            </GlassCard>
+          )}
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
