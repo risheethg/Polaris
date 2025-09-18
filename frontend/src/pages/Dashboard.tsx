@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Star, TrendingUp, MapPin, Clock, Loader2, Map as MapIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface CareerData {
   id: string;
@@ -231,65 +231,81 @@ export const Dashboard = () => {
 
           {/* Career Details Sidebar */}
           <div className="w-96 p-6 space-y-6">
-            {selectedCareer ? (
-              <GlassCard className="space-y-6">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="text-2xl font-heading font-bold">{selectedCareer.title}</h3>
-                    <Badge variant="secondary" className="mt-2 capitalize">
-                      {selectedCareer.category}
-                    </Badge>
-                  </div>
-                  <Star className={`text-constellation-${selectedCareer.category}`} size={24} />
-                </div>
-                
-                <p className="text-muted-foreground">{selectedCareer.description}</p>
-                
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-semibold mb-2 flex items-center gap-2">
-                      <TrendingUp size={16} />
-                      Salary Range
-                    </h4>
-                    <p className="text-lg font-bold text-secondary">{selectedCareer.salary}</p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-semibold mb-2 flex items-center gap-2">
-                      <MapPin size={16} />
-                      Job Growth
-                    </h4>
-                    <p className="text-accent font-bold">{selectedCareer.growth} (10-year outlook)</p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-semibold mb-2 flex items-center gap-2">
-                      <Clock size={16} />
-                      Time to Entry
-                    </h4>
-                    <p>{selectedCareer.timeToEntry}</p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-semibold mb-2">Key Skills</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedCareer.skills.map((skill) => (
-                        <Badge key={skill} variant="outline">{skill}</Badge>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                
-                <Button 
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-                  onClick={() => navigate('/recommendations', { state: { cluster: selectedCareer.category } })}
+            <AnimatePresence mode="wait">
+              {selectedCareer ? (
+                <motion.div
+                  key={selectedCareer.id}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
                 >
-                  <MapIcon className="mr-2 h-4 w-4" />
-                  Get Roadmap
-                </Button>
-              </GlassCard>
-            ) : (
-              <GlassCard className="text-center space-y-4">
+                  <GlassCard className="space-y-6">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h3 className="text-2xl font-heading font-bold">{selectedCareer.title}</h3>
+                        <Badge variant="secondary" className="mt-2 capitalize">
+                          {selectedCareer.category}
+                        </Badge>
+                      </div>
+                      <Star className={`text-constellation-${selectedCareer.category}`} size={24} />
+                    </div>
+                    
+                    <p className="text-muted-foreground">{selectedCareer.description}</p>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="font-semibold mb-2 flex items-center gap-2">
+                          <TrendingUp size={16} />
+                          Salary Range
+                        </h4>
+                        <p className="text-lg font-bold text-secondary">{selectedCareer.salary}</p>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-semibold mb-2 flex items-center gap-2">
+                          <MapPin size={16} />
+                          Job Growth
+                        </h4>
+                        <p className="text-accent font-bold">{selectedCareer.growth} (10-year outlook)</p>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-semibold mb-2 flex items-center gap-2">
+                          <Clock size={16} />
+                          Time to Entry
+                        </h4>
+                        <p>{selectedCareer.timeToEntry}</p>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-semibold mb-2">Key Skills</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {selectedCareer.skills.map((skill) => (
+                            <Badge key={skill} variant="outline">{skill}</Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <Button 
+                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                      onClick={() => navigate('/recommendations', { state: { cluster: selectedCareer.category } })}
+                    >
+                      <MapIcon className="mr-2 h-4 w-4" />
+                      Get Roadmap
+                    </Button>
+                  </GlassCard>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="placeholder"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.2, ease: 'easeOut' }}
+                >
+                  <GlassCard className="text-center space-y-4">
                 <Star className="mx-auto text-muted-foreground" size={48} />
                 <div>
                   <h3 className="text-xl font-heading font-bold">Explore Your Options</h3>
@@ -301,7 +317,9 @@ export const Dashboard = () => {
                   ✨ Pulsing stars are part of your recommended path
                 </div>
               </GlassCard>
-            )}
+                </motion.div>
+              )}
+            </AnimatePresence>
             
             {/* Recommended Path */}
             <GlassCard>
