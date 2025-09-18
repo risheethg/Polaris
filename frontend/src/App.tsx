@@ -8,7 +8,6 @@ import { Landing } from "./pages/Landing";
 import { Assessment } from "./pages/Assessment";
 import { Results } from "./pages/Results";
 import { Dashboard } from "./pages/Dashboard";
-import Recommendations from "./pages/Recommendations";
 import { Profile } from './pages/Profile';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Layout } from './components/Layout';
@@ -42,11 +41,6 @@ const AppRoutes = () => {
           <Route path="/profile" element={
             <ProtectedRoute>
               <Profile />
-            </ProtectedRoute>
-          } />
-          <Route path="/recommendations" element={
-            <ProtectedRoute>
-              <Recommendations />
             </ProtectedRoute>
           } />
         </Route>

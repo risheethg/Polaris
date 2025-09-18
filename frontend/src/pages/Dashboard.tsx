@@ -290,10 +290,11 @@ export const Dashboard = () => {
                     
                     <Button 
                       className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-                      onClick={() => navigate('/recommendations', { state: { cluster: selectedCareer.category } })}
+                      // This can be repurposed later, e.g., to open a detailed modal
+                      onClick={() => console.log("Viewing details for:", selectedCareer.title)}
                     >
                       <MapIcon className="mr-2 h-4 w-4" />
-                      Get Roadmap
+                      View Details
                     </Button>
                   </GlassCard>
                 </motion.div>
