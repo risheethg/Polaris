@@ -8,10 +8,12 @@ import { Landing } from "./pages/Landing";
 import { Assessment } from "./pages/Assessment";
 import { Results } from "./pages/Results";
 import { Dashboard } from "./pages/Dashboard";
+import Recommendations from "./pages/Recommendations";
 import { Profile } from './pages/Profile';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Layout } from './components/Layout';
 import NotFound from "./pages/NotFound";
+import { DebugProvider } from "@/context/DebugContext";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +44,11 @@ const AppRoutes = () => {
               <Profile />
             </ProtectedRoute>
           } />
+          <Route path="/recommendations" element={
+            <ProtectedRoute>
+              <Recommendations />
+            </ProtectedRoute>
+          } />
         </Route>
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
@@ -56,9 +63,11 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
+        <DebugProvider>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </DebugProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

@@ -1,5 +1,5 @@
-import { useAuth } from '@/hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { PolarisLogo } from './PolarisLogo';
 import { Button } from './ui/button';
 import {
@@ -11,10 +11,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LayoutDashboard, LogOut, Settings, User as UserIcon } from 'lucide-react';
+import { LayoutDashboard, LogOut, Settings, TestTube2, User as UserIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/firebase';
+import { useAuth } from '@/hooks/useAuth';
+import { useDebug } from '@/context/DebugContext';
+import { Label } from './ui/label';
+import { Switch } from './ui/switch';
 
 export const Header = () => {
   const { user } = useAuth();
@@ -31,17 +35,25 @@ export const Header = () => {
     }
   };
 
+  const { isDebugMode, setIsDebugMode } = useDebug();
+
   return (
-    <header className="p-6 sticky top-0 z-50 bg-background/80 backdrop-blur-sm">
-      <nav className="max-w-7xl mx-auto flex justify-between items-center">
-        <div
-          className="cursor-pointer"
-          onClick={() => navigate(user && user.personality ? '/dashboard' : '/')}
-        >
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-14 max-w-screen-2xl items-center justify-between">
+        <Link to={user?.personality ? '/dashboard' : '/'} className="flex items-center space-x-2">
           <PolarisLogo size="sm" />
-        </div>
+        </Link>
+
         <div className="flex items-center gap-4">
-          {user && (
+          <div className="flex items-center justify-center space-x-2">
+            <TestTube2 size={16} className="text-muted-foreground" />
+            <Label htmlFor="debug-mode-header" className="text-muted-foreground text-sm">
+              Debug Mode
+            </Label>
+            <Switch id="debug-mode-header" checked={isDebugMode} onCheckedChange={setIsDebugMode} />
+          </div>
+
+          {user ? (
             <>
               <Button variant="ghost" onClick={() => navigate('/dashboard')}>
                 <LayoutDashboard className="mr-2 h-4 w-4" />
@@ -82,9 +94,11 @@ export const Header = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
+          ) : (
+            <Button onClick={() => navigate('/')}>Sign In</Button>
           )}
         </div>
-      </nav>
+      </div>
     </header>
   );
 };

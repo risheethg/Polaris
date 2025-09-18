@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { GlassCard } from '@/components/GlassCard';
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { PolarisLogo } from '@/components/PolarisLogo'; // Keep for hero
-import { ArrowRight, Loader2, Navigation, Sparkles, Target, TestTube2 } from 'lucide-react';
+import { ArrowRight, Loader2, Navigation, Sparkles, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { useDebug } from '@/context/DebugContext';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '@/firebase';
 import { toast } from 'sonner';
@@ -25,14 +24,8 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
 export const Landing = () => {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
+  const { isDebugMode } = useDebug();
   const [isSigningIn, setIsSigningIn] = useState(false);
-
-  const [isDebugMode, setIsDebugMode] = useState(() => {
-    return localStorage.getItem('polaris-debug-mode') === 'true';
-  });
-  useEffect(() => {
-    localStorage.setItem('polaris-debug-mode', String(isDebugMode));
-  }, [isDebugMode]);
 
   // This state will track if the user has completed the assessment
   const [hasCompletedAssessment, setHasCompletedAssessment] = useState(false);
@@ -154,7 +147,7 @@ export const Landing = () => {
                 </h2>
                 <p className="text-lg md:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
                   Discover your perfect career path through AI-powered personality analysis and data-driven insights. 
-                  Navigate your future like the stars—with precision, confidence, and inspiration.
+                  Navigate your future like the stars; with precision, confidence, and inspiration.
                 </p>
               </div>
               
@@ -187,11 +180,6 @@ export const Landing = () => {
                       {isSigningIn ? 'Please wait...' : 'Sign In with Google to Begin'}
                     </Button>
                   )}
-                  <div className="flex items-center justify-center space-x-2 pt-4">
-                    <TestTube2 size={16} className="text-muted-foreground" />
-                    <Label htmlFor="debug-mode" className="text-muted-foreground">Debug Mode</Label>
-                    <Switch id="debug-mode" checked={isDebugMode} onCheckedChange={setIsDebugMode} />
-                  </div>
                 </div>
               )}
 
