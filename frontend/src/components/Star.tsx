@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Sphere, Text } from '@react-three/drei';
+import { Sphere, Text, Html } from '@react-three/drei';
 import * as THREE from 'three';
 
 interface StarProps {
@@ -15,7 +15,7 @@ interface StarProps {
 
 export const Star = ({ id, position, color, size, label, pulsing = false, onClick }: StarProps) => {
   const ref = useRef<THREE.Mesh>(null!);
-  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false); // This will be used for interaction feedback
   const [isActive, setIsActive] = useState(false);
 
   useFrame((state, delta) => {
@@ -43,9 +43,13 @@ export const Star = ({ id, position, color, size, label, pulsing = false, onClic
         onPointerOut={handlePointerOut}
         onClick={handleClick}
       >
-        <meshStandardMaterial color={isHovered ? 'white' : color} emissive={color} emissiveIntensity={isHovered ? 2 : 1} toneMapped={false} />
+        <meshStandardMaterial color={isHovered ? 'white' : color} emissive={color} emissiveIntensity={isHovered ? 2.5 : 1.5} toneMapped={false} />
       </Sphere>
-      {(isHovered || isActive) && <Text position={[0, size + 0.5, 0]} fontSize={0.5} color="white" anchorX="center" anchorY="middle">{label}</Text>}
+      <Html distanceFactor={10}>
+        <div className={`transition-opacity duration-300 pointer-events-none ${isHovered || isActive ? 'opacity-100' : 'opacity-0'}`}>
+          <div className="px-2 py-1 text-xs text-white bg-black/50 rounded-md whitespace-nowrap -translate-x-1/2 -translate-y-8">{label}</div>
+        </div>
+      </Html>
     </group>
   );
 };

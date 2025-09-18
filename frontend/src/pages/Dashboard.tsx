@@ -8,6 +8,7 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription
 } from '@/components/ui/dialog';
 import { Scene } from '@/components/Scene';
+import { aStar, AStarNode } from '@/lib/a-star';
 
 interface CareerData {
   id: string;
@@ -131,6 +132,44 @@ export const Dashboard = () => {
     setSelectedCareer(career || null);
     setIsModalOpen(true);
   };
+
+  // A* Pathfinding Logic
+  useEffect(() => {
+    if (userProfile && recommendedPath.length > 1) {
+      const startNode = careerConstellations.find(c => c.id === recommendedPath[0]);
+      // For demo, let's target the second recommended career. This could be user-selected.
+      const goalNode = careerConstellations.find(c => c.id === recommendedPath[1]);
+
+      if (startNode && goalNode) {
+        const getPosition = (node: CareerData) => ({
+          x: (node.x - 50) / 4,
+          y: (node.y - 50) / 4,
+          z: 0, // Simplified for now, can be randomized like in Scene.tsx
+        });
+
+        const distance = (a: CareerData, b: CareerData) => {
+          const posA = getPosition(a);
+          const posB = getPosition(b);
+          // Euclidean distance
+          return Math.sqrt(
+            Math.pow(posA.x - posB.x, 2) +
+            Math.pow(posA.y - posB.y, 2) +
+            Math.pow(posA.z - posB.z, 2)
+          );
+        };
+
+        const path = aStar({
+          start: startNode,
+          goal: goalNode,
+          getNeighbors: (node) => careerConstellations.filter(c => c.id !== node.id),
+          distance: distance, // g(n) - actual distance
+          heuristic: distance, // h(n) - estimated distance (Euclidean is a perfect heuristic here)
+        });
+
+        setRecommendedPath(path.map(p => p.id));
+      }
+    }
+  }, [userProfile]); // Rerun when user profile and initial recommendations are loaded
 
   if (loading || authLoading) {
     return (
