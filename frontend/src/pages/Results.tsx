@@ -37,6 +37,11 @@ export const Results = () => {
     const fetchPersonality = async () => {
       if (user) {
         try {
+          // Start a timer for the minimum display time of the loading animation.
+          /////////////////////////////////////////////////////////////////////
+          //////////////      ARTIFICIAL DELAY      /////////////////////////
+          const minDisplayTime = new Promise(res => setTimeout(res, 2500));
+          ///////////////////////////////////////////////////////////////
           const idToken = await user.getIdToken();
           // Poll the backend until the personality vector is available
           const poll = async (retries = 10, delay = 1500): Promise<Personality> => {
@@ -55,7 +60,8 @@ export const Results = () => {
             throw new Error('Personality results not available in time.');
           };
 
-          const p = await poll();
+          // Wait for both the data fetch and the minimum display time to complete.
+          const [p] = await Promise.all([poll(), minDisplayTime]);
           setPersonality(p);
         } catch (error) {
           console.error('Failed to fetch personality:', error);
