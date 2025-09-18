@@ -8,7 +8,7 @@ services:
     container_name: polaris_backend
     ports:
       - "8000:8000"
-    volumes:
+    volumes: 
       - ./backend:/app
       - ./backend/serviceAccountKey.json:/app/serviceAccountKey.json
     environment:

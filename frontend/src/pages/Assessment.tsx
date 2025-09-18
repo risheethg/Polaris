@@ -98,7 +98,7 @@ export const Assessment = () => {
       }
 
       toast.success("Assessment submitted! Generating your results...");
-      navigate('/dashboard');
+      navigate('/results');
     } catch (error) {
       console.error("Assessment submission failed:", error);
       toast.error("There was a problem submitting your results. Please try again.");

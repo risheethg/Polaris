@@ -5,8 +5,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Landing } from "./pages/Landing";
 import { Assessment } from "./pages/Assessment";
+import { Results } from "./pages/Results";
 import { Dashboard } from "./pages/Dashboard";
 import { Profile } from './pages/Profile';
+import { ProtectedRoute } from './components/ProtectedRoute';
 import { Layout } from './components/Layout';
 import NotFound from "./pages/NotFound";
 
@@ -21,9 +23,26 @@ const App = () => (
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Landing />} />
-            <Route path="/assessment" element={<Assessment />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/assessment" element={
+              <ProtectedRoute>
+                <Assessment />
+              </ProtectedRoute>
+            } />
+            <Route path="/results" element={
+              <ProtectedRoute>
+                <Results />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
