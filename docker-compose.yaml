@@ -28,5 +28,17 @@ services:
     stdin_open: true
     tty: true
 
+  ml_service: 
+    build:
+      context: .
+      dockerfile: scripts/Dockerfile.ml
+    container_name: polaris_ml_service
+    volumes:
+      - ./scripts:/app
+      - ./scraper/scrapped_job.json:/app/scrapped_job.json
+    depends_on:
+      - backend
+      - frontend
+
 volumes:
   node_modules:

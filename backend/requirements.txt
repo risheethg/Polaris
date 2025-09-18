@@ -4,3 +4,8 @@ firebase-admin
 pydantic-settings
 pydantic[email]
 python-dotenv
+pandas
+scikit-learn
+gcsfs
+fsspec
+google-cloud-storage
