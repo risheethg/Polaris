@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { GlassCard } from '@/components/GlassCard';
 import { Progress } from '@/components/ui/progress';
 import { ArrowLeft, CheckCircle, Loader2 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
@@ -67,11 +67,24 @@ const questions = [
 
 export const Assessment = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('debug') === 'true') {
+      // Pre-fill answers for questions 1-47 with random-ish values (mostly neutral)
+      // and jump to the last question.
+      const debugAnswers = Array.from({ length: questions.length - 1 }, (_, i) => (i % 5));
+      setAnswers(debugAnswers);
+      setCurrentQuestion(questions.length - 1);
+      toast.info("Debug mode enabled. Starting at the last question.");
+    }
+  }, [location.search]);
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
   const isLastQuestion = currentQuestion === questions.length - 1;

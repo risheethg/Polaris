@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { GlassCard } from '@/components/GlassCard';
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { PolarisLogo } from '@/components/PolarisLogo'; // Keep for hero
-import { ArrowRight, Loader2, Navigation, Sparkles, Target } from 'lucide-react';
+import { ArrowRight, Loader2, Navigation, Sparkles, Target, TestTube2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
@@ -24,6 +26,13 @@ export const Landing = () => {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [isSigningIn, setIsSigningIn] = useState(false);
+
+  const [isDebugMode, setIsDebugMode] = useState(() => {
+    return localStorage.getItem('polaris-debug-mode') === 'true';
+  });
+  useEffect(() => {
+    localStorage.setItem('polaris-debug-mode', String(isDebugMode));
+  }, [isDebugMode]);
 
   // This state will track if the user has completed the assessment
   const [hasCompletedAssessment, setHasCompletedAssessment] = useState(false);
@@ -100,7 +109,7 @@ export const Landing = () => {
           throw new Error(`Server error: ${response.status}`);
         }
   
-        navigate('/assessment');
+        navigate(isDebugMode ? '/assessment?debug=true' : '/assessment');
         // 4. Check for personality data to decide where to navigate.
         const meResponse = await fetch('http://127.0.0.1:8000/api/v1/users/me', {
           method: 'GET',
@@ -110,9 +119,9 @@ export const Landing = () => {
         if (meResponse.ok) {
           const userData = await meResponse.json();
           setHasCompletedAssessment(!!userData.personality);
-          navigate(userData.personality ? '/dashboard' : '/assessment'); // Navigate after sign-in
+          navigate(userData.personality ? '/dashboard' : (isDebugMode ? '/assessment?debug=true' : '/assessment')); // Navigate after sign-in
         } else {
-          navigate('/assessment'); // Fallback to assessment on error
+          navigate(isDebugMode ? '/assessment?debug=true' : '/assessment'); // Fallback to assessment on error
         }
         resolve(result.user);
       } catch (error) {
@@ -156,7 +165,7 @@ export const Landing = () => {
                       <Button 
                         size="lg" 
                         className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-semibold glow-primary"
-                        onClick={() => navigate(hasCompletedAssessment ? '/dashboard' : '/assessment')}
+                        onClick={() => navigate(hasCompletedAssessment ? '/dashboard' : (isDebugMode ? '/assessment?debug=true' : '/assessment'))}
                       >
                         {hasCompletedAssessment ? 'View Your Dashboard' : 'Begin Your Journey'}
                         <ArrowRight className="ml-2" size={20} />
@@ -178,6 +187,11 @@ export const Landing = () => {
                       {isSigningIn ? 'Please wait...' : 'Sign In with Google to Begin'}
                     </Button>
                   )}
+                  <div className="flex items-center justify-center space-x-2 pt-4">
+                    <TestTube2 size={16} className="text-muted-foreground" />
+                    <Label htmlFor="debug-mode" className="text-muted-foreground">Debug Mode</Label>
+                    <Switch id="debug-mode" checked={isDebugMode} onCheckedChange={setIsDebugMode} />
+                  </div>
                 </div>
               )}
 
