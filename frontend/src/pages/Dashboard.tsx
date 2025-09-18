@@ -3,9 +3,10 @@ import { Button } from '@/components/ui/button';
 import { GlassCard } from '@/components/GlassCard';
 import { ConstellationNode } from '@/components/ConstellationNode';
 import { Badge } from '@/components/ui/badge';
-import { Star, TrendingUp, MapPin, Clock, Loader2 } from 'lucide-react';
+import { Star, TrendingUp, MapPin, Clock, Loader2, Map as MapIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { motion } from 'framer-motion';
 
 interface CareerData {
   id: string;
@@ -133,7 +134,12 @@ export const Dashboard = () => {
   }
 
   return (
-    <div className="flex flex-col">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+      className="flex flex-col"
+    >
       <div className="flex-1 flex p-6">
         <div className="container mx-auto flex">
           {/* Main Constellation View */}
@@ -274,6 +280,7 @@ export const Dashboard = () => {
                 </div>
                 
                 <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+                  <MapIcon className="mr-2 h-4 w-4" />
                   Get Roadmap
                 </Button>
               </GlassCard>
@@ -317,6 +324,6 @@ export const Dashboard = () => {
           </div>
         </div>
       </div>
-    </div>  
+    </motion.div>  
   );
 };
