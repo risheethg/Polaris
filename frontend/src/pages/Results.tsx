@@ -92,7 +92,13 @@ export const Results = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center overflow-hidden">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className="min-h-screen w-full flex items-center justify-center overflow-hidden"
+    >
       <AnimatePresence mode="wait">
         {loading ? (
           <motion.div
@@ -149,6 +155,6 @@ export const Results = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 };

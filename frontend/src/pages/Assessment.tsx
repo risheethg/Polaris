@@ -4,6 +4,7 @@ import { GlassCard } from '@/components/GlassCard';
 import { Progress } from '@/components/ui/progress';
 import { ArrowLeft, CheckCircle, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 
@@ -134,7 +135,13 @@ export const Assessment = () => {
   };
 
   return (
-    <div className="flex flex-col">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+      className="flex flex-col"
+    >
       {/* Assessment Content */}
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="container mx-auto">
@@ -213,6 +220,6 @@ export const Assessment = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
