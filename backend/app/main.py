@@ -13,6 +13,7 @@ import inspect
 from app.core.logger import logs
 from app.core.firebase import initialize_firebase
 from app.routes.auth import router as auth_router
+from app.routes.kmeans import router as kmeans_router, load_ml_artifacts
 
 
 @asynccontextmanager
@@ -22,6 +23,8 @@ async def lifespan(app: FastAPI):
     try:
         initialize_firebase()
         logs.define_logger(level=logging.INFO, message="--- FIREBASE INITIALIZED SUCCESSFULLY ---")
+        # Load ML models and data
+        load_ml_artifacts()
     except Exception as e:
         logs.define_logger(
             level=logging.CRITICAL, 
@@ -85,6 +88,7 @@ app.add_middleware(
 )
 
 app.include_router(auth_router, prefix="/api/v1/users")
+app.include_router(kmeans_router, prefix="/api/v1/ml")
 
 @app.get("/")
 def read_root():

@@ -2,106 +2,106 @@ import pandas as pd
 import json
 import os
 import warnings
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
 from sklearn.cluster import KMeans
 import numpy as np
 import gcsfs
-import joblib 
+import joblib
 
-# Ignore the KMeans convergence warning 
+# Ignore the KMeans convergence warning
 warnings.filterwarnings("ignore", category=UserWarning)
 
-# Cloud-Enabled Data Ingestion 
-def load_job_data_from_gcs(bucket_path: str) -> list:
-    """
-    Loads job data from a JSON file in a GCS bucket.
-    
-    Args:
-        bucket_path (str): The full GCS path to the JSON file (e.g., 'gs://your-bucket/scrapped_job.json').
+# --- Configuration ---
+# The input file is now the one with the pre-computed reduced vectors
+GCS_INPUT_PATH = os.getenv("GCS_DATA_PATH", "gs://your-bucket-name/jobs_with_vectors_and_pca.json")
+# The output directory for the trained model and its artifacts
+AIP_MODEL_DIR = os.getenv("AIP_MODEL_DIR", "gs://your-bucket-name/job-cluster-model-v2")
 
-    Returns:
-        list: A list of dictionaries. Returns an empty list if the file is not found.
-    """
+N_CLUSTERS = 8 # Number of job clusters to create
+
+def load_vectorized_data(bucket_path: str) -> pd.DataFrame:
+    """Loads job data with pre-computed vectors from a JSON file in GCS."""
+    print(f"Attempting to load data from: {bucket_path}")
     try:
-        # Use gcsfs to open the file as if it were local
         with gcsfs.GCSFileSystem().open(bucket_path, 'r') as f:
             data = json.load(f)
-            if isinstance(data, list):
-                return data
-            print(f"Error: Expected a JSON list of objects in '{bucket_path}', but found a different format.")
-            return []
+        print(f"Successfully loaded {len(data)} job records.")
+        return pd.DataFrame(data)
     except Exception as e:
-        print(f"Error loading file from GCS: {e}")
-        return []
+        print(f"Fatal Error: Could not load or parse data from GCS. {e}")
+        return pd.DataFrame()
 
-# Get the GCS input path from environment variables set by Vertex AI
-GCS_DATA_PATH = os.getenv("GCS_DATA_PATH", "gs://your-bucket-name/scrapped_job.json")
+# --- Main Execution ---
+jobs_df = load_vectorized_data(GCS_INPUT_PATH)
 
-jobs_json_list = load_job_data_from_gcs(GCS_DATA_PATH)
-
-if not jobs_json_list:
-    print("Aborting clustering. No valid job data found.")
+# Check for the new 'reduced_content_vector' column
+if jobs_df.empty or 'reduced_content_vector' not in jobs_df.columns or 'job_riasec_vector' not in jobs_df.columns:
+    print("Aborting clustering. Input data is missing, empty, or lacks the required 'reduced_content_vector' column.")
 else:
-    jobs_df = pd.DataFrame(jobs_json_list)
-
-    # Preprocessing & Vectorization 
-    def get_skills_text(skills):
-        if isinstance(skills, list):
-            return ' '.join(skills)
-        elif isinstance(skills, dict):
-            technical_skills = ' '.join(skills.get('technical', []))
-            soft_skills = ' '.join(skills.get('soft', []))
-            return f"{technical_skills} {soft_skills}"
-        return ""
-
-    jobs_df['all_text'] = jobs_df['title'] + ' ' + jobs_df['description'] + ' ' + jobs_df['required_skills'].apply(get_skills_text)
-    experience_map = {"0-2 years": 1, "1-3 years": 2, "2-4 years": 3, "3-5 years": 4, "0-1 year": 1, "5+ years": 5}
-    jobs_df['experience_num'] = jobs_df['experience_required'].map(experience_map)
-    jobs_df.dropna(subset=['experience_num'], inplace=True)
+    # 1. Simplified Feature Engineering
+    print("Starting feature engineering...")
     
-    preprocessor = ColumnTransformer(
-        transformers=[
-            ('text_vectorizer', TfidfVectorizer(stop_words='english'), 'all_text'),
-            ('one_hot_encoder', OneHotEncoder(), ['industry']),
-            ('experience_num_passthrough', 'passthrough', ['experience_num'])
-        ],
-        remainder='drop'
-    )
-    n_clusters = 4
+    riasec_order = ['R', 'I', 'A', 'S', 'E', 'C']
+    riasec_vectors = jobs_df['job_riasec_vector'].apply(lambda d: [d.get(k, 0) for k in riasec_order])
     
-    if len(jobs_df) < n_clusters:
-        print(f"Cannot run KMeans with {n_clusters} clusters. Need at least {n_clusters} samples. Only found {len(jobs_df)}.")
+    # Combine the REDUCED content vector with the RIASEC vector
+    combined_vectors = [
+        reduced_vec + riasec_vec 
+        for reduced_vec, riasec_vec in zip(jobs_df['reduced_content_vector'], riasec_vectors)
+    ]
+    
+    feature_matrix = np.vstack(combined_vectors)
+    print(f"Feature matrix created with shape: {feature_matrix.shape}")
+
+    # 2. Simplified Model Training: Run KMeans directly
+    if len(jobs_df) < N_CLUSTERS:
+        print(f"Cannot run KMeans. Need at least {N_CLUSTERS} samples, but only have {len(jobs_df)}.")
     else:
-        pipeline = Pipeline(steps=[
-            ('preprocessor', preprocessor),
-            ('clusterer', KMeans(n_clusters=n_clusters, random_state=42, n_init='auto'))
-        ])
+        # No Pipeline is needed as PCA is already done. We train KMeans directly.
+        print(f"Training KMeans model directly with {N_CLUSTERS} clusters...")
+        kmeans = KMeans(n_clusters=N_CLUSTERS, random_state=42, n_init='auto')
+        kmeans.fit(feature_matrix)
         
-        # Training the Model
-        pipeline.fit(jobs_df)
-        jobs_df['cluster_label'] = pipeline.named_steps['clusterer'].labels_
-        
-        # Save the Trained Model to GCS 
-        model_dir = os.getenv("AIP_MODEL_DIR", "trained_model_local")
-        model_path = os.path.join(model_dir, 'model.joblib')
-        
-        joblib.dump(pipeline, model_path)
-        print(f"Model saved to {model_path}")
-        
-        # Cluster Analysis 
-        tfidf_vectorizer = pipeline.named_steps['preprocessor'].named_transformers_['text_vectorizer']
-        tfidf_feature_names = tfidf_vectorizer.get_feature_names_out()
-        cluster_centers = pipeline.named_steps['clusterer'].cluster_centers_
-        top_n_words = 5
+        jobs_df['cluster_label'] = kmeans.labels_
+        print("Model training complete.")
 
-        print("\n Interpreting Cluster Topics ")
+        # 3. Save Model Artifacts to GCS
+        print(f"Saving model artifacts to: {AIP_MODEL_DIR}")
+        fs = gcsfs.GCSFileSystem()
+        if not fs.exists(AIP_MODEL_DIR):
+            fs.mkdirs(AIP_MODEL_DIR)
+
+        # Save the trained KMeans model
+        model_path = os.path.join(AIP_MODEL_DIR, 'model.joblib')
+        with fs.open(model_path, 'wb') as f:
+            joblib.dump(kmeans, f)
+        print(f"KMeans model saved to {model_path}")
+        
+        # 4. Create and Save Cluster Profiles
+        cluster_profiles = []
+        cluster_centers = kmeans.cluster_centers_
+        
         for i, center in enumerate(cluster_centers):
-            tfidf_weights = center[:len(tfidf_feature_names)]
-            top_feature_indices = tfidf_weights.argsort()[-top_n_words:][::-1]
-            top_words = [tfidf_feature_names[j] for j in top_feature_indices]
+            # The last 6 elements of each center correspond to the RIASEC scores
+            avg_riasec_vector = center[-6:]
+            profile = {
+                'cluster_label': i,
+                'riasec_profile': {code: round(float(score), 4) for code, score in zip(riasec_order, avg_riasec_vector)}
+            }
+            cluster_profiles.append(profile)
 
-            print(f"\nCluster {i} Topic: {', '.join(top_words)}")
-            print(f"Jobs in this cluster: {', '.join(jobs_df[jobs_df['cluster_label'] == i]['title'].tolist())}")
+        profiles_path = os.path.join(AIP_MODEL_DIR, 'cluster_profiles.json')
+        with fs.open(profiles_path, 'w') as f:
+            json.dump(cluster_profiles, f, indent=2)
+        print(f"Cluster personality profiles saved to {profiles_path}")
+
+        # 5. Cluster Analysis (for logging)
+        print("\n--- Interpreting Cluster Personas & Content ---")
+        for i in range(N_CLUSTERS):
+            cluster_jobs_df = jobs_df[jobs_df['cluster_label'] == i]
+            profile = next(p for p in cluster_profiles if p['cluster_label'] == i)
+            persona = max(profile['riasec_profile'], key=profile['riasec_profile'].get)
+            
+            print(f"\n## Cluster {i} (Dominant Persona: {persona})")
+            print(f"   Avg. RIASEC Profile: {profile['riasec_profile']}")
+            sample_titles = cluster_jobs_df['title'].head(3).tolist()
+            print(f"   Sample Jobs: {', '.join(sample_titles)}")
