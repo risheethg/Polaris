@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { GlassCard } from '@/components/GlassCard';
-import { ConstellationNode } from '@/components/ConstellationNode';
 import { Badge } from '@/components/ui/badge';
-import { Star, TrendingUp, MapPin, Clock, Loader2, Map as MapIcon, ZoomIn, ZoomOut, X } from 'lucide-react';
+import { Star, TrendingUp, MapPin, Clock, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription
 } from '@/components/ui/dialog';
+import { Scene } from '@/components/Scene';
 
 interface CareerData {
   id: string;
@@ -74,20 +72,6 @@ export const Dashboard = () => {
   const [recommendedPath, setRecommendedPath] = useState<string[]>([]);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [scale, setScale] = useState(1);
-
-  // For 3D perspective effect
-  const motionX = useMotionValue(0.5);
-  const motionY = useMotionValue(0.5);
-  const rotateX = useTransform(motionY, [0, 1], [10, -10]);
-  const rotateY = useTransform(motionX, [0, 1], [-10, 10]);
-
-  const handleMouseMove = (event: React.MouseEvent) => {
-    const { clientWidth, clientHeight } = event.currentTarget;
-    const { clientX, clientY } = event;
-    motionX.set(clientX / clientWidth);
-    motionY.set(clientY / clientHeight);
-  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -158,83 +142,15 @@ export const Dashboard = () => {
   }
 
   return (
-    <div className="h-[calc(100vh-3.5rem)] w-full overflow-hidden flex flex-col items-center justify-center bg-background" onMouseMove={handleMouseMove}>
+    <div className="h-[calc(100vh-3.5rem)] w-full relative">
       <div className="text-center mb-8 absolute top-6 left-1/2 -translate-x-1/2 z-20">
         <h1 className="text-4xl font-heading font-bold mb-2">Your Career Constellation</h1>
         <p className="text-muted-foreground">
-          Pan, zoom, and click on any star to explore your opportunities.
+          Orbit, zoom, and click on any star to explore your opportunities.
         </p>
       </div>
 
-      <motion.div
-        drag
-        dragConstraints={{ left: -500, right: 500, top: -300, bottom: 300 }}
-        className="w-[150vw] h-[150vh] relative cursor-grab active:cursor-grabbing"
-        style={{ perspective: '1000px' }}
-      >
-        <motion.div
-          className="w-full h-full"
-          style={{ rotateX, rotateY, scale }}
-          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        >
-          {/* Background grid */}
-          <div className="absolute inset-0 opacity-20">
-            <div className="h-full w-full" style={{
-              backgroundImage: 'radial-gradient(circle, hsl(var(--border)) 1px, transparent 1px)',
-              backgroundSize: '50px 50px'
-            }} />
-          </div>
-
-          {/* Career Nodes */}
-          {careerConstellations.map((career) => (
-            <ConstellationNode
-              key={career.id}
-              id={career.id}
-              x={career.x}
-              y={career.y}
-              size={career.size}
-              color={career.category}
-              active={selectedCareer?.id === career.id}
-              pulsing={recommendedPath.includes(career.id)}
-              onClick={handleCareerClick}
-              label={career.title}
-            />
-          ))}
-
-          {/* Recommended Path Lines */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none">
-            {recommendedPath.slice(0, -1).map((careerIdStart, index) => {
-              const startCareer = careerConstellations.find(c => c.id === careerIdStart);
-              const endCareer = careerConstellations.find(c => c.id === recommendedPath[index + 1]);
-              if (!startCareer || !endCareer) return null;
-
-              return (
-                <line
-                  key={`${careerIdStart}-${endCareer.id}`}
-                  x1={`${startCareer.x}%`}
-                  y1={`${startCareer.y}%`}
-                  x2={`${endCareer.x}%`}
-                  y2={`${endCareer.y}%`}
-                  stroke="hsl(var(--primary))"
-                  strokeWidth="1.5"
-                  strokeDasharray="5 5"
-                  className="constellation-line opacity-60"
-                />
-              );
-            })}
-          </svg>
-        </motion.div>
-      </motion.div>
-
-      {/* Zoom Controls */}
-      <div className="absolute bottom-6 right-6 z-20 flex flex-col gap-2">
-        <Button size="icon" onClick={() => setScale(s => Math.min(s + 0.1, 2))}>
-          <ZoomIn size={20} />
-        </Button>
-        <Button size="icon" onClick={() => setScale(s => Math.max(s - 0.1, 0.5))}>
-          <ZoomOut size={20} />
-        </Button>
-      </div>
+      <Scene careers={careerConstellations} recommendedPath={recommendedPath} onStarClick={handleCareerClick} />
 
       {/* Details Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
