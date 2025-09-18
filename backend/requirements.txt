@@ -6,6 +6,8 @@ pydantic[email]
 python-dotenv
 pandas
 scikit-learn
+numpy
 gcsfs
 fsspec
 google-cloud-storage
+joblib
