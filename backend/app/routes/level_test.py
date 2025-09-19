@@ -63,10 +63,31 @@ def generate_quiz_from_llm(job_title: str):
     """Generates a quiz using the Gemini model on Vertex AI."""
     # Your prompt is good, no changes needed here.
     prompt_template = PromptTemplate(
-        template="""
-        You are an expert technical assessor... (your full prompt here)
-        ...for the role of a "{job_title}".
-        """,
+        template="""You are an expert technical assessor responsible for creating a skills quiz for a candidate interested in the role of a "{job_title}".
+
+Your task is to generate a 5-question multiple-choice quiz. The quiz should have a mix of difficulties:
+- 2 "Beginner" questions
+- 2 "Intermediate" questions
+- 1 "Advanced" question
+
+For each question, provide 4 options and clearly indicate the correct answer.
+
+You MUST return the output as a single, minified JSON object with no markdown formatting.
+The JSON object should have two keys: "title" and "questions".
+The "title" should be a string like "Technical Assessment: [Job Title]".
+The "questions" key should be an array of question objects. Each question object must have the following keys:
+- "question_text": The full text of the question.
+- "options": An array of 4 strings representing the possible answers.
+- "difficulty": A string, either "Beginner", "Intermediate", or "Advanced".
+- "correct_answer": The string that exactly matches the correct option.
+
+Example for a single question object:
+{{
+  "question_text": "What is the primary purpose of a 'key' prop in a list of React components?",
+  "options": ["To style the component", "To uniquely identify elements for efficient updates", "To pass data to child components", "To handle click events"],
+  "difficulty": "Beginner",
+  "correct_answer": "To uniquely identify elements for efficient updates"
+}}""",
         input_variables=["job_title"],
     )
     chain = prompt_template | model | json_parser
@@ -194,4 +215,3 @@ def submit_quiz_route(submission: SubmissionRequest):
         print(f"🔥🔥🔥 UNHANDLED EXCEPTION in /submit-quiz: {type(e).__name__}: {e}")
         traceback.print_exc()
         return Response.failure(message="Failed to submit quiz.", status_code=500, error_details=str(e))
-
