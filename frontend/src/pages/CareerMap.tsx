@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
-import { CareerStep } from '@/components/CareerStep';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stars as DreiStars } from '@react-three/drei';
+import * as THREE from 'three';
+import { CareerStep3D } from '@/components/CareerStep3D';
 
 // --- Type Definitions ---
 interface CareerMapStep {
@@ -127,19 +128,27 @@ const CareerMapScene: React.FC<CareerMapSceneProps> = ({ data }) => {
           This is one of many potential pathways from your starting point.
         </p>
       </div>
-      <Canvas camera={{ position: [0, 15, 30], fov: 75 }}>
+      <Canvas camera={{ position: [0, 0, 60], fov: 75 }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
         <DreiStars
           radius={100} depth={50} count={5000}
           factor={4} saturation={0} fade speed={1}
         />
-        <group position={[0, -10, 0]}>
+        <group position={[0, 15, 0]}>
           {data.steps.map((step, index) => (
-            <CareerStep key={index} step={step} />
+            <CareerStep3D key={index} step={step} position={new THREE.Vector3(0, 0, 0)} />
           ))}
         </group>
-        <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
+        <OrbitControls 
+          enablePan={true}
+          enableZoom={true}
+          enableRotate={false}
+          minAzimuthAngle={0} // Lock horizontal panning
+          maxAzimuthAngle={0} // Lock horizontal panning
+          minPolarAngle={0} // Allow full vertical panning
+          maxPolarAngle={Math.PI} // Allow full vertical panning
+        />
       </Canvas>
     </div>
   );
