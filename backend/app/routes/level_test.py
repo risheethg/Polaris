@@ -63,6 +63,7 @@ def generate_quiz_from_llm(job_title: str):
     """Generates a quiz using the Gemini model on Vertex AI."""
     # Your prompt is good, no changes needed here.
     prompt_template = PromptTemplate(
+<<<<<<< HEAD
         template="""You are an expert technical assessor responsible for creating a skills quiz for a candidate interested in the role of a "{job_title}".
 
 Your task is to generate a 5-question multiple-choice quiz. The quiz should have a mix of difficulties:
@@ -88,6 +89,12 @@ Example for a single question object:
   "difficulty": "Beginner",
   "correct_answer": "To uniquely identify elements for efficient updates"
 }}""",
+=======
+        template="""
+        You are an expert technical assessor... (your full prompt here)
+        ...for the role of a "{job_title}".
+        """,
+>>>>>>> 8a124b1c (Level Test implemented)
         input_variables=["job_title"],
     )
     chain = prompt_template | model | json_parser
