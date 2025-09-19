@@ -12,6 +12,7 @@ import { Profile } from './pages/Profile';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Layout } from './components/Layout';
 import NotFound from "./pages/NotFound";
+import { DebugProvider } from "@/context/DebugContext";
 
 const queryClient = new QueryClient();
 
@@ -56,9 +57,11 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
+        <DebugProvider>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </DebugProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
