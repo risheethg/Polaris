@@ -4,3 +4,4 @@ firebase-admin
 pydantic-settings
 pydantic[email]
 python-dotenv
+google-cloud-aiplatform

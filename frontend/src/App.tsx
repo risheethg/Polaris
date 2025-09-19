@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { Landing } from "./pages/Landing";
 import { Assessment } from "./pages/Assessment";
+import { LevelAssessment } from './pages/LevelAssessment';
 import { Results } from "./pages/Results";
 import { Dashboard } from "./pages/Dashboard";
 import { CareerMap } from './pages/CareerMap';
@@ -37,6 +38,11 @@ const AppRoutes = () => {
           <Route path="/dashboard" element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/level-assessment/:mapId" element={
+            <ProtectedRoute>
+              <LevelAssessment />
             </ProtectedRoute>
           } />
           <Route path="/profile" element={

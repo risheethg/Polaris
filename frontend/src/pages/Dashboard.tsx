@@ -153,7 +153,7 @@ export const Dashboard = () => {
     // setSelectedCareer(career || null);
     // setIsModalOpen(true);
     // Navigate to the career map page
-    navigate(`/career-map/${careerId}`);
+    navigate(`/level-assessment/${careerId}`);
   };
 
   if (loading || authLoading) {
