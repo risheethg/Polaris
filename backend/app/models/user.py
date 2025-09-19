@@ -1,6 +1,9 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional, List, Dict, Any
 
+# Import the FinancialStatus model to be used as a nested model
+from app.models.user_details import FinancialStatus
+
 class UserBase(BaseModel):
     """
     Represents a user's data retrieved from the authentication token.
@@ -26,3 +29,9 @@ class User(UserBase):
     interests: List[str] = []
     personality: Optional[Dict[str, Any]] = None
     career_map: Optional[Dict[str, Any]] = None
+
+    # Add the new optional fields for personal and financial details
+    current_role: Optional[str] = Field(None, description="Current job title or role")
+    years_of_experience: Optional[int] = Field(None, ge=0, description="Years of professional experience")
+    education_level: Optional[str] = Field(None, description="Highest level of education completed")
+    financial_status: Optional[FinancialStatus] = Field(None, description="User's financial situation")

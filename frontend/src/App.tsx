@@ -15,6 +15,7 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { Layout } from './components/Layout';
 import NotFound from "./pages/NotFound";
 import { DebugProvider } from "@/context/DebugContext";
+import { PersonalDetails } from './pages/PersonalDetails';
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,11 @@ const AppRoutes = () => {
               <Profile />
             </ProtectedRoute>
           } />
+          <Route path="/details" element={
+            <ProtectedRoute>
+              <PersonalDetails />
+            </ProtectedRoute>
+            } />
           <Route path="/career-map/:mapId" element={
             <ProtectedRoute>
               <CareerMap />
