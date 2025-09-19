@@ -11,9 +11,10 @@ interface StarProps {
   label: string;
   pulsing?: boolean;
   onClick: (id: string) => void;
+  onHover: (id: string | null) => void;
 }
 
-export const Star = ({ id, position, color, size, label, pulsing = false, onClick }: StarProps) => {
+export const Star = ({ id, position, color, size, label, pulsing = false, onClick, onHover }: StarProps) => {
   const ref = useRef<THREE.Mesh>(null!);
   const [isHovered, setIsHovered] = useState(false); // This will be used for interaction feedback
   const [isActive, setIsActive] = useState(false);
@@ -27,8 +28,15 @@ export const Star = ({ id, position, color, size, label, pulsing = false, onClic
     }
   });
 
-  const handlePointerOver = () => setIsHovered(true);
-  const handlePointerOut = () => setIsHovered(false);
+  const handlePointerOver = (e: any) => {
+    e.stopPropagation();
+    setIsHovered(true);
+    onHover(id);
+  };
+  const handlePointerOut = () => {
+    setIsHovered(false);
+    onHover(null);
+  };
   const handleClick = () => {
     setIsActive(true);
     onClick(id);
@@ -43,7 +51,7 @@ export const Star = ({ id, position, color, size, label, pulsing = false, onClic
         onPointerOut={handlePointerOut}
         onClick={handleClick}
       >
-        <meshStandardMaterial color={isHovered ? 'white' : color} emissive={color} emissiveIntensity={isHovered ? 2.5 : 1.5} toneMapped={false} />
+        <meshStandardMaterial color={isHovered ? 'white' : color} emissive={color} emissiveIntensity={isHovered || pulsing ? 1.5 : 0.5} toneMapped={false} />
       </Sphere>
       <Html distanceFactor={10}>
         <div className={`transition-opacity duration-300 pointer-events-none ${isHovered || isActive ? 'opacity-100' : 'opacity-0'}`}>

@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Star, TrendingUp, MapPin, Clock, Loader2 } from 'lucide-react';
+import { Star, TrendingUp, MapPin, Clock, Loader2, User, Sparkles, Compass } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription
 } from '@/components/ui/dialog';
 import { Scene } from '@/components/Scene';
+import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
 import { aStar, AStarNode } from '@/lib/a-star';
 
 interface CareerData {
@@ -34,6 +36,24 @@ interface RiasecTrait {
   name: string;
   description: string;
 }
+
+const riasecDetails: { [key: string]: RiasecTrait } = {
+  R: { name: 'Realistic', description: 'Practical, hands-on, and action-oriented "Doers".' },
+  I: { name: 'Investigative', description: 'Analytical, curious, and observant "Thinkers".' },
+  A: { name: 'Artistic', description: 'Expressive, original, and independent "Creators".' },
+  S: { name: 'Social', description: 'Cooperative, supportive, and empathetic "Helpers".' },
+  E: { name: 'Enterprising', description: 'Ambitious, sociable, and energetic "Persuaders".' },
+  C: { name: 'Conventional', description: 'Precise, methodical, and detail-oriented "Organizers".' },
+};
+
+
+const categoryColors: { [key: string]: string } = {
+  tech: 'bg-blue-400',
+  creative: 'bg-purple-400',
+  business: 'bg-green-400',
+  science: 'bg-yellow-400',
+  health: 'bg-red-400',
+};
 
 const careerConstellations: CareerData[] = [
   // Tech & Data Cluster
@@ -73,6 +93,7 @@ export const Dashboard = () => {
   const [recommendedPath, setRecommendedPath] = useState<string[]>([]);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [hoveredCareer, setHoveredCareer] = useState<CareerData | null>(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -131,47 +152,9 @@ export const Dashboard = () => {
     // const career = careerConstellations.find(c => c.id === careerId);
     // setSelectedCareer(career || null);
     // setIsModalOpen(true);
-    // Navigate to the new career map page
+    // Navigate to the career map page
     navigate(`/career-map/${careerId}`);
   };
-
-  // A* Pathfinding Logic
-  useEffect(() => {
-    if (userProfile && recommendedPath.length > 1) {
-      const startNode = careerConstellations.find(c => c.id === recommendedPath[0]);
-      // For demo, let's target the second recommended career. This could be user-selected.
-      const goalNode = careerConstellations.find(c => c.id === recommendedPath[1]);
-
-      if (startNode && goalNode) {
-        const getPosition = (node: CareerData) => ({
-          x: (node.x - 50) / 4,
-          y: (node.y - 50) / 4,
-          z: 0, // Simplified for now, can be randomized like in Scene.tsx
-        });
-
-        const distance = (a: CareerData, b: CareerData) => {
-          const posA = getPosition(a);
-          const posB = getPosition(b);
-          // Euclidean distance
-          return Math.sqrt(
-            Math.pow(posA.x - posB.x, 2) +
-            Math.pow(posA.y - posB.y, 2) +
-            Math.pow(posA.z - posB.z, 2)
-          );
-        };
-
-        const path = aStar({
-          start: startNode,
-          goal: goalNode,
-          getNeighbors: (node) => careerConstellations.filter(c => c.id !== node.id),
-          distance: distance, // g(n) - actual distance
-          heuristic: distance, // h(n) - estimated distance (Euclidean is a perfect heuristic here)
-        });
-
-        setRecommendedPath(path.map(p => p.id));
-      }
-    }
-  }, [userProfile]); // Rerun when user profile and initial recommendations are loaded
 
   if (loading || authLoading) {
     return (
@@ -186,12 +169,32 @@ export const Dashboard = () => {
     <div className="h-[calc(100vh-3.5rem)] w-full relative">
       <div className="text-center mb-8 absolute top-6 left-1/2 -translate-x-1/2 z-20">
         <h1 className="text-4xl font-heading font-bold mb-2">Your Career Constellation</h1>
-        <p className="text-muted-foreground">
-          Orbit, zoom, and click on any star to explore your opportunities.
-        </p>
+        {userProfile && (
+          <p className="text-muted-foreground">
+            Welcome, {userProfile.name.split(' ')[0]}! Orbit, zoom, and click on any star to explore your opportunities.
+          </p>
+        )}
       </div>
 
-      <Scene careers={careerConstellations} recommendedPath={recommendedPath} onStarClick={handleCareerClick} />
+      <main className="w-full h-full">
+        <Scene 
+          careers={careerConstellations} 
+          recommendedPath={recommendedPath} 
+          onStarClick={handleCareerClick}
+          onStarHover={id => setHoveredCareer(careerConstellations.find(c => c.id === id) || null)}
+        />
+        <CareerLegend />
+        {hoveredCareer && (
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="absolute bottom-4 right-4 z-20 bg-background/50 backdrop-blur-sm p-4 rounded-lg border border-border/40 max-w-sm"
+          >
+            <h4 className="font-heading text-lg">{hoveredCareer.title}</h4>
+            <p className="text-sm text-muted-foreground">{hoveredCareer.description}</p>
+          </motion.div>
+        )}
+      </main>
 
       {/* Details Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -230,6 +233,24 @@ export const Dashboard = () => {
           )}
         </DialogContent>
       </Dialog>
+    </div>
+  );
+};
+
+const CareerLegend = () => {
+  return (
+    <div className="absolute bottom-4 left-4 z-20 bg-background/50 backdrop-blur-sm p-4 rounded-lg border border-border/40">
+      <h4 className="font-heading text-lg mb-3">Career Clusters</h4>
+      <div className="space-y-2">
+        {Object.entries(categoryColors).map(([category, colorClass]) => (
+          <div key={category} className="flex items-center gap-3">
+            <div className={cn('h-3 w-3 rounded-full', colorClass)} />
+            <span className="text-sm capitalize text-muted-foreground">
+              {category}
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

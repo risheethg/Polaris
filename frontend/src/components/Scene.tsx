@@ -17,6 +17,7 @@ interface SceneProps {
   careers: CareerData[];
   recommendedPath: string[];
   onStarClick: (id: string) => void;
+  onStarHover: (id: string | null) => void;
 }
 
 const sizeMap = { small: 0.3, medium: 0.5, large: 0.7 };
@@ -28,7 +29,7 @@ const colorMap = {
   health: '#EC7063',
 };
 
-export const Scene = ({ careers, recommendedPath, onStarClick }: SceneProps) => {
+export const Scene = ({ careers, recommendedPath, onStarClick, onStarHover }: SceneProps) => {
   const pathPoints = recommendedPath.map(id => {
     const career = careers.find(c => c.id === id);
     if (!career) return new THREE.Vector3(0, 0, 0); // Should not happen
@@ -37,7 +38,7 @@ export const Scene = ({ careers, recommendedPath, onStarClick }: SceneProps) => 
   }).filter(p => p); // Filter out any potential nulls
 
   return (
-    <Canvas camera={{ position: [0, 0, 25], fov: 75 }}>
+    <Canvas camera={{ position: [0, 0, 30], fov: 75 }}>
       <ambientLight intensity={0.2} />
       <pointLight position={[10, 10, 10]} intensity={1} />
       <DreiStars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
@@ -45,18 +46,18 @@ export const Scene = ({ careers, recommendedPath, onStarClick }: SceneProps) => 
         // Use a deterministic z-position so lines connect properly
         const zPos = (career.id.charCodeAt(0) % 10 - 5) * 1.5;
         return (
-          <Star key={career.id} id={career.id} position={[(career.x - 50) / 4, (career.y - 50) / 4, zPos]} size={sizeMap[career.size]} color={colorMap[career.category]} label={career.title} pulsing={recommendedPath.includes(career.id)} onClick={onStarClick} />
+          <Star key={career.id} id={career.id} position={[(career.x - 50) / 4, (career.y - 50) / 4, zPos]} size={sizeMap[career.size]} color={colorMap[career.category]} label={career.title} pulsing={recommendedPath.includes(career.id)} onClick={onStarClick} onHover={onStarHover} />
         )
       })}
       {pathPoints.length > 1 && (
         <Line 
           points={pathPoints} 
-          color="hsl(var(--primary))" 
-          lineWidth={1.5} 
+          color="hsl(var(--primary))"
+          lineWidth={3}
           transparent 
-          opacity={0.7} />
+          opacity={0.8} />
       )}
-      <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
+      <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} minDistance={5} maxDistance={50} />
     </Canvas>
   );
 };
