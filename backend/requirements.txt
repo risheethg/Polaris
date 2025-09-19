@@ -5,3 +5,4 @@ pydantic-settings
 pydantic[email]
 python-dotenv
 google-cloud-aiplatform
+langchain-google-genai
