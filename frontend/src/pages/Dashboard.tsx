@@ -128,9 +128,11 @@ export const Dashboard = () => {
   }, [user, authLoading, navigate]);
 
   const handleCareerClick = (careerId: string) => {
-    const career = careerConstellations.find(c => c.id === careerId);
-    setSelectedCareer(career || null);
-    setIsModalOpen(true);
+    // const career = careerConstellations.find(c => c.id === careerId);
+    // setSelectedCareer(career || null);
+    // setIsModalOpen(true);
+    // Navigate to the new career map page
+    navigate(`/career-map/${careerId}`);
   };
 
   // A* Pathfinding Logic
