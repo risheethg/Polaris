@@ -142,12 +142,13 @@ const CareerMapScene: React.FC<CareerMapSceneProps> = ({ data }) => {
         </group>
         <OrbitControls 
           enablePan={true}
-          enableZoom={true}
+          enableZoom={false}
           enableRotate={false}
           minAzimuthAngle={0} // Lock horizontal panning
           maxAzimuthAngle={0} // Lock horizontal panning
-          minPolarAngle={0} // Allow full vertical panning
-          maxPolarAngle={Math.PI} // Allow full vertical panning
+          minPolarAngle={Math.PI / 2} // Lock vertical rotation
+          maxPolarAngle={Math.PI / 2} // Lock vertical rotation
+          mouseButtons={{ LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.DOLLY, RIGHT: THREE.ROTATE }}
         />
       </Canvas>
     </div>
