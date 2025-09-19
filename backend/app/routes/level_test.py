@@ -2,9 +2,9 @@ import os
 import json
 import firebase_admin
 from firebase_admin import credentials, firestore
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, APIRouter
 from pydantic import BaseModel
-from typing import List
+from typing import List, Dict, Any
 
 import vertexai
 from vertexai.generative_models import GenerativeModel
@@ -22,8 +22,7 @@ vertexai.init(project=PROJECT_ID, location=LOCATION)
 
 # Initialize the Gemini model
 model = GenerativeModel("gemini-1.0-pro")
-app = FastAPI()
-
+router = APIRouter()
 
 # --- Pydantic Models for Data Validation ---
 class QuizRequest(BaseModel):
@@ -37,6 +36,9 @@ class SubmissionRequest(BaseModel):
     user_id: str
     job_title: str
     answers: List[UserAnswer]
+
+# IMPORT the new roadmap generation function and its model
+from app.services.roadmap_gen import generate_personalized_roadmap, RoadmapResponse
 
 
 # --- Helper Functions ---
@@ -63,7 +65,7 @@ async def evaluate_score_with_llm(job_title: str, score_percentage: int, perform
 
 
 # --- API Routes ---
-@app.post("/generate-quiz")
+@router.post("/generate-quiz")
 async def generate_quiz_route(request: QuizRequest):
     job_title = request.job_title
     quiz_id = job_title.lower().replace(" ", "_")
@@ -86,7 +88,7 @@ async def generate_quiz_route(request: QuizRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.post("/submit-quiz")
+@router.post("/submit-quiz")
 async def submit_quiz_route(submission: SubmissionRequest):
     try:
         quiz_id = submission.job_title.lower().replace(" ", "_")
@@ -123,21 +125,40 @@ async def submit_quiz_route(submission: SubmissionRequest):
 
         score_percentage = int((total_score / max_score) * 100) if max_score > 0 else 0
 
-        # --- Get Qualitative Evaluation from LLM ---
-        evaluation_json_str = await evaluate_score_with_llm(submission.job_title, score_percentage, performance)
-        evaluation_data = json.loads(evaluation_json_str)
+        # --- Get Qualitative Assessment and Roadmap from LLM ---
+        # This is the new call to the service function
+        assessment_and_roadmap = await generate_personalized_roadmap(
+            submission.job_title,
+            score_percentage,
+            performance
+        )
 
         # --- Save result to Firestore ---
         assessment_result = {
             "userId": submission.user_id,
             "quizId": quiz_id,
             "score": score_percentage,
-            **evaluation_data, # Merges 'level' and 'feedback' keys
+            "level": assessment_and_roadmap.level,
+            "levelJustification": assessment_and_roadmap.level_justification,
             "submittedAt": firestore.SERVER_TIMESTAMP
         }
         db.collection('userAssessments').add(assessment_result)
 
-        return assessment_result
+        # --- Save the personalized roadmap to a new collection ---
+        roadmap_data = {
+            "userId": submission.user_id,
+            "jobTitle": submission.job_title,
+            "level": assessment_and_roadmap.level,
+            "roadmap": assessment_and_roadmap.roadmap,
+            "generatedAt": firestore.SERVER_TIMESTAMP
+        }
+        db.collection('userRoadmaps').add(roadmap_data)
+
+        # Return a combined response to the user
+        return {
+            "assessmentResult": assessment_result,
+            "roadmap": roadmap_data
+        }
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
