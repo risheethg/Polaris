@@ -152,13 +152,8 @@ export const Dashboard = () => {
     // const career = careerConstellations.find(c => c.id === careerId);
     // setSelectedCareer(career || null);
     // setIsModalOpen(true);
-<<<<<<< HEAD
     // Navigate to the career map page
     navigate(`/level-assessment/${careerId}`);
-=======
-    // Navigate to the new career map page
-    navigate(`/career-map/${careerId}`);
->>>>>>> 174a2bba (basic career path added)
   };
 
   if (loading || authLoading) {
