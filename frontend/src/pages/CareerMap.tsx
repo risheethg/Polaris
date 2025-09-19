@@ -5,6 +5,7 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stars as DreiStars } from '@react-three/drei';
 import * as THREE from 'three';
 import { CareerStep3D } from '@/components/CareerStep3D';
+<<<<<<< HEAD
 
 // --- Type Definitions ---
 interface CareerMapStep {
@@ -26,6 +27,8 @@ interface CareerMapSceneProps {
   data: CareerMapData;
 }
 
+=======
+>>>>>>> 41b2b3a6 (WIP cm)
 
 // --- Type Definitions ---
 interface CareerMapStep {

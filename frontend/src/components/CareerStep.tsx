@@ -11,33 +11,14 @@ interface Step {
   next_steps: Step[];
 }
 
-const stepColors = {
-  EXPERIENCE: '#5DADE2', // tech blue
-  SPECIALIZATION: '#AF7AC5', // creative purple
-  PIVOT: '#48C9B0', // science teal
-}
+const typeStyles = {
+  EXPERIENCE: { icon: <Rocket className="h-5 w-5 text-secondary" />, color: 'border-secondary/50' },
+  SPECIALIZATION: { icon: <Sparkles className="h-5 w-5 text-primary" />, color: 'border-primary/50' },
+  PIVOT: { icon: <GitBranch className="h-5 w-5 text-accent" />, color: 'border-accent/50' },
+};
 
-const Star = ({ position, color }: { position: [number, number, number], color: string }) => {
-  const ref = useRef<THREE.Mesh>(null!);
-  useFrame((state) => {
-    if (ref.current) {
-      const time = state.clock.getElapsedTime();
-      const scale = 1 + Math.sin(time * 2) * 0.15;
-      ref.current.scale.set(scale, scale, scale);
-    }
-  });
-  return (
-    <mesh position={position} ref={ref}>
-      <sphereGeometry args={[0.3, 32, 32]} />
-      <meshStandardMaterial color={color} emissive={color} emissiveIntensity={1.5} toneMapped={false} />
-    </mesh>
-  )
-}
-
-export const CareerStep = ({ step, position = [0, 0, 0] }: { step: Step, position?: [number, number, number] }) => {
-  const color = stepColors[step.type] || '#F5B041';
-  const yOffset = 6;
-  const xSpread = 8;
+export const CareerStep = ({ step, isFirst = false }: { step: Step; isFirst?: boolean }) => {
+  const { icon, color } = typeStyles[step.type] || typeStyles.EXPERIENCE;
 
   return (
     <motion.div
