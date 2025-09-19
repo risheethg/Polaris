@@ -83,14 +83,14 @@ export const CareerMap = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="container mx-auto max-w-4xl p-8"
+      className="container mx-auto max-w-7xl p-8"
     >
       {loading ? (
         <div className="flex h-[60vh] items-center justify-center">
           <Loader2 className="h-12 w-12 animate-spin text-primary" />
         </div>
       ) : careerMapData ? (
-        <>
+        <div className="flex flex-col items-center">
           <h1 className="text-4xl font-bold font-heading mb-2">Career Map: {careerMapData.startJobTitle}</h1>
           <p className="text-muted-foreground mb-12">A potential pathway from your starting point.</p>
           <div className="space-y-8">
@@ -98,7 +98,7 @@ export const CareerMap = () => {
               <CareerStep key={index} step={step} isFirst={index === 0} />
             ))}
           </div>
-        </>
+        </div>
       ) : (
         <p>No career map data found for ID: {mapId}</p>
       )}
