@@ -75,11 +75,18 @@ export const Landing = () => {
       const provider = new GoogleAuthProvider();
       try {
         const result = await signInWithPopup(auth, provider);
-        const idToken = await result.user.getIdToken();
+        const { user } = result;
+        const idToken = await user.getIdToken();
   
         const headers = {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${idToken}`
+        };
+
+        const registrationPayload = {
+          name: user.displayName,
+          email: user.email,
+          picture: user.photoURL,
         };
 
         // 1. Try to register the user first
@@ -102,7 +109,6 @@ export const Landing = () => {
           throw new Error(`Server error: ${response.status}`);
         }
   
-        navigate(isDebugMode ? '/assessment?debug=true' : '/assessment');
         // 4. Check for personality data to decide where to navigate.
         const meResponse = await fetch('http://127.0.0.1:8000/api/v1/users/me', {
           method: 'GET',

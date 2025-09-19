@@ -1,5 +1,7 @@
-import { motion } from 'framer-motion';
-import { CheckCircle, Rocket, Sparkles, Orbit, Star, GitBranch } from 'lucide-react';
+import { useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
+import { Line, Text } from '@react-three/drei';
+import * as THREE from 'three';
 
 interface Step {
   step_number: number;
@@ -11,71 +13,70 @@ interface Step {
   next_steps: Step[];
 }
 
-const typeStyles = {
-  EXPERIENCE: { icon: <Rocket className="h-5 w-5 text-secondary" />, color: 'border-secondary/50' },
-  SPECIALIZATION: { icon: <Sparkles className="h-5 w-5 text-primary" />, color: 'border-primary/50' },
-  PIVOT: { icon: <GitBranch className="h-5 w-5 text-accent" />, color: 'border-accent/50' },
-};
+const stepColors = {
+  EXPERIENCE: '#5DADE2', // tech blue
+  SPECIALIZATION: '#AF7AC5', // creative purple
+  PIVOT: '#48C9B0', // science teal
+}
 
-export const CareerStep = ({ step, isFirst = false }: { step: Step; isFirst?: boolean }) => {
-  const { icon, color } = typeStyles[step.type] || typeStyles.EXPERIENCE;
+const Star = ({ position, color }: { position: [number, number, number], color: string }) => {
+  const ref = useRef<THREE.Mesh>(null!);
+  useFrame((state) => {
+    if (ref.current) {
+      const time = state.clock.getElapsedTime();
+      const scale = 1 + Math.sin(time * 2) * 0.15;
+      ref.current.scale.set(scale, scale, scale);
+    }
+  });
+  return (
+    <mesh position={position} ref={ref}>
+      <sphereGeometry args={[0.3, 32, 32]} />
+      <meshStandardMaterial color={color} emissive={color} emissiveIntensity={1.5} toneMapped={false} />
+    </mesh>
+  )
+}
+
+export const CareerStep = ({ step, position = [0, 0, 0] }: { step: Step, position?: [number, number, number] }) => {
+  const color = stepColors[step.type] || '#F5B041';
+  const yOffset = 6;
+  const xSpread = 8;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.1 }}
-      className="relative flex flex-col items-center"
-    >
-      {/* The star representing this career step */}
-      <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-background ring-2 ring-primary/30">
-        <Star className="h-6 w-6 text-primary/80 fill-current" />
-      </div>
-
-      {/* The card with details for this step */}
-      <div className={`mt-4 w-full max-w-sm rounded-xl border bg-card/50 p-6 text-center shadow-lg shadow-black/20 ${color}`}>
-        <div className="mb-4 flex flex-col items-center justify-center">
-          <div className="flex items-center gap-3">
-            {icon}
-            <h2 className="text-2xl font-bold font-heading">{step.title}</h2>
-          </div>
-          <div className="text-sm text-muted-foreground font-mono">{step.duration}</div>
-        </div>
-
-        <p className="mb-6 text-muted-foreground">{step.description}</p>
-
-        <div>
-          <h3 className="mb-3 font-semibold">Key Milestones:</h3>
-          <ul className="space-y-2">
-            {step.tasks_to_complete.map((task, index) => (
-              <li key={index} className="flex items-start gap-3 text-left text-muted-foreground/80">
-                <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
-                <span>{task}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
+    <group position={position}>
+      <Star position={[0, 0, 0]} color={color} />
+      <Text
+        position={[0, -0.8, 0]}
+        color="white"
+        fontSize={0.5}
+        anchorX="center"
+        anchorY="middle"
+        maxWidth={5}
+        textAlign="center"
+      >
+        {step.title}
+      </Text>
+      <Text
+        position={[0, -1.4, 0]}
+        color="hsl(var(--muted-foreground))"
+        fontSize={0.3}
+        anchorX="center"
+        anchorY="middle"
+      >
+        {step.duration}
+      </Text>
       {step.next_steps && step.next_steps.length > 0 && (
-        <>
-          {/* Vertical line going up to the branching point */}
-          <div className="mt-4 h-16 w-px bg-gradient-to-b from-primary/30 to-primary/10"></div>
-
-          {/* Container for the next steps, arranged horizontally */}
-          <div className="relative flex w-full justify-center">
-            {/* Horizontal line connecting the branches */}
-            {step.next_steps.length > 1 && (
-              <div className="absolute top-6 h-px w-full max-w-3xl bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
-            )}
-            <div className="flex w-full justify-around gap-8">
-              {step.next_steps.map((nextStep, index) => (
-                <CareerStep key={index} step={nextStep} />
-              ))}
-            </div>
-          </div>
-        </>
+        step.next_steps.map((nextStep, index) => {
+          const totalWidth = (step.next_steps.length - 1) * xSpread;
+          const nextX = index * xSpread - totalWidth / 2;
+          const nextY = yOffset;
+          return (
+            <group key={index}>
+              <Line points={[[0, 0, 0], [nextX, nextY, 0]]} color="white" lineWidth={0.5} dashed dashSize={0.5} gapSize={0.5} />
+              <CareerStep step={nextStep} position={[nextX, nextY, 0]} />
+            </group>
+          )
+        })
       )}
-    </motion.div>
+    </group>
   );
 };

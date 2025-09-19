@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import { CareerStep } from '@/components/CareerStep';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, Stars as DreiStars } from '@react-three/drei';
 
 const dummyData = {
   startJobTitle: "Graduate Software Engineer",
@@ -78,30 +79,34 @@ export const CareerMap = () => {
   }, [mapId, isDebug]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      className="container mx-auto max-w-7xl p-8"
-    >
+    <div className="h-[calc(100vh-3.5rem)] w-full relative">
       {loading ? (
-        <div className="flex h-[60vh] items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center bg-background z-10">
           <Loader2 className="h-12 w-12 animate-spin text-primary" />
         </div>
       ) : careerMapData ? (
-        <div className="flex flex-col items-center">
-          <h1 className="text-4xl font-bold font-heading mb-2">Career Map: {careerMapData.startJobTitle}</h1>
-          <p className="text-muted-foreground mb-12">A potential pathway from your starting point.</p>
-          <div className="space-y-8">
-            {careerMapData.steps.map((step: any, index: number) => (
-              <CareerStep key={index} step={step} isFirst={index === 0} />
-            ))}
+        <>
+          <div className="text-center mb-8 absolute top-6 left-1/2 -translate-x-1/2 z-20">
+            <h1 className="text-4xl font-heading font-bold mb-2">Career Constellation: {careerMapData.startJobTitle}</h1>
+            <p className="text-muted-foreground">
+              This is one of many potential pathways from your starting point.
+            </p>
           </div>
-        </div>
+          <Canvas camera={{ position: [0, 15, 30], fov: 75 }}>
+            <ambientLight intensity={0.5} />
+            <pointLight position={[10, 10, 10]} />
+            <DreiStars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+            <group position={[0, -10, 0]}>
+              {careerMapData.steps.map((step: any, index: number) => (
+                <CareerStep key={index} step={step} />
+              ))}
+            </group>
+            <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
+          </Canvas>
+        </>
       ) : (
         <p>No career map data found for ID: {mapId}</p>
       )}
-    </motion.div>
+    </div>
   );
 };
