@@ -27,6 +27,27 @@ interface CareerMapSceneProps {
 }
 
 
+// --- Type Definitions ---
+interface CareerMapStep {
+  step_number: number;
+  title: string;
+  type: "EXPERIENCE" | "SPECIALIZATION" | "PIVOT";
+  duration: string;
+  description: string;
+  tasks_to_complete: string[];
+  next_steps: CareerMapStep[];
+}
+
+interface CareerMapData {
+  startJobTitle: string;
+  steps: CareerMapStep[];
+}
+
+interface CareerMapSceneProps {
+  data: CareerMapData;
+}
+
+
 const dummyData = {
   startJobTitle: "Graduate Software Engineer",
   steps: [
