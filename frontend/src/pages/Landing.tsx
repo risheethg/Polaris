@@ -95,6 +95,13 @@ export const Landing = () => {
           headers,
         });
 
+        // If registration is successful (new user), navigate them directly to the details form.
+        if (response.status === 201) {
+          navigate('/details-form');
+          resolve(result.user);
+          return;
+        }
+
         // 2. If the user already exists (409 Conflict), then log them in.
         if (response.status === 409) {
           console.log("User already registered. Attempting to log in.");
@@ -118,9 +125,9 @@ export const Landing = () => {
         if (meResponse.ok) {
           const userData = await meResponse.json();
           setHasCompletedAssessment(!!userData.personality);
-          navigate(userData.personality ? '/dashboard' : (isDebugMode ? '/assessment?debug=true' : '/assessment')); // Navigate after sign-in
+          navigate(userData.personality ? '/dashboard' : (isDebugMode ? '/assessment?debug=true' : '/details-form')); // Navigate after sign-in
         } else {
-          navigate(isDebugMode ? '/assessment?debug=true' : '/assessment'); // Fallback to assessment on error
+          navigate(isDebugMode ? '/assessment?debug=true' : '/details-form'); // Fallback to assessment on error
         }
         resolve(result.user);
       } catch (error) {
@@ -164,7 +171,7 @@ export const Landing = () => {
                       <Button 
                         size="lg" 
                         className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-semibold glow-primary"
-                        onClick={() => navigate(hasCompletedAssessment ? '/dashboard' : (isDebugMode ? '/assessment?debug=true' : '/assessment'))}
+                        onClick={() => navigate(hasCompletedAssessment ? '/dashboard' : '/details-form')}
                       >
                         {hasCompletedAssessment ? 'View Your Dashboard' : 'Begin Your Journey'}
                         <ArrowRight className="ml-2" size={20} />

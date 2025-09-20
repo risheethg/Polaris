@@ -11,11 +11,11 @@ import { Results } from "./pages/Results";
 import { Dashboard } from "./pages/Dashboard";
 import { CareerMap } from './pages/CareerMap';
 import { Profile } from './pages/Profile';
+import { PersonalDetailsForm } from './pages/PersonalDetailsForm';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Layout } from './components/Layout';
 import NotFound from "./pages/NotFound";
 import { DebugProvider } from "@/context/DebugContext";
-import { PersonalDetails } from './pages/PersonalDetails';
 
 const queryClient = new QueryClient();
 
@@ -51,14 +51,14 @@ const AppRoutes = () => {
               <Profile />
             </ProtectedRoute>
           } />
-          <Route path="/details" element={
-            <ProtectedRoute>
-              <PersonalDetails />
-            </ProtectedRoute>
-            } />
           <Route path="/career-map/:mapId" element={
             <ProtectedRoute>
               <CareerMap />
+            </ProtectedRoute>
+          } />
+          <Route path="/details-form" element={
+            <ProtectedRoute>
+              <PersonalDetailsForm />
             </ProtectedRoute>
           } />
         </Route>

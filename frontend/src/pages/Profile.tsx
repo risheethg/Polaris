@@ -155,7 +155,7 @@ export const Profile = () => {
           <p className="text-muted-foreground mb-4">
             Keep your personal and financial details up-to-date for better recommendations.
           </p>
-          <Button className="w-full" onClick={() => navigate('/details')}>
+          <Button className="w-full" onClick={() => navigate('/details-form')}>
             <UserIcon className="mr-2 h-4 w-4" />
             Edit Details
           </Button>
