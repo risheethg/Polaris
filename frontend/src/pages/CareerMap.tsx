@@ -111,7 +111,7 @@ const CareerMapScene: React.FC<CareerMapSceneProps> = ({ data }) => {
   // Recursive function to render steps and their children
   const renderSteps = (steps: CareerMapStep[], parentPosition: THREE.Vector3, level = 0): { elements: JSX.Element[], width: number } => {
     const elements: JSX.Element[] = [];
-    const yOffset = 45; // Vertical spacing between levels
+    const yOffset = 65; // Vertical spacing between levels
     const xPadding = 30; // Horizontal padding between sibling branches
     const baseCardWidth = 50; // A base width for leaf nodes to ensure they have space
     let totalWidth = 0;

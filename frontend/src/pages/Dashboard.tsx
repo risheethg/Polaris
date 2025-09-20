@@ -213,7 +213,7 @@ export const Dashboard = () => {
         <h1 className="text-4xl font-heading font-bold mb-2">Your Career Constellation</h1>
         {userProfile && (
           <p className="text-muted-foreground">
-            Welcome, {userProfile.name.split(' ')[0]}! Orbit, zoom, and click on any star to explore your opportunities.
+            Welcome, {userProfile.name?.split(' ')[0] || 'Explorer'}! Orbit, zoom, and click on any star to explore your opportunities.
           </p>
         )}
       </div>
