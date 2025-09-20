@@ -19,6 +19,7 @@ class RiascScore(BaseModel):
 class Job(BaseModel):
     title: str
     description: str
+    cluster_label: int
 
 class RecommendationResponse(BaseModel):
     best_cluster_id: int
@@ -93,8 +94,8 @@ def recommend_jobs_for_user(user_scores: RiascScore):
             best_cluster_id = profile['cluster_label']
 
     recommended_jobs = [
-        Job(title=job['title'], description=job['description'])
-        for job in all_jobs_data if job.get('cluster_label') == best_cluster_id
+        job for job in all_jobs_data 
+        if job.get('cluster_label') == best_cluster_id
     ]
 
     return RecommendationResponse(best_cluster_id=best_cluster_id, recommendations=recommended_jobs)
@@ -111,3 +112,13 @@ def get_cluster_profiles():
         raise HTTPException(status_code=503, detail="Service unavailable: Cluster profiles not loaded.")
     
     return cluster_profiles
+
+@router.get("/all", response_model=List[Job])
+def get_all_jobs():
+    """
+    Returns all jobs with their assigned cluster labels.
+    """
+    if not all_jobs_data:
+        raise HTTPException(status_code=503, detail="Service unavailable: Job models not loaded.")
+    
+    return all_jobs_data

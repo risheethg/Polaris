@@ -171,7 +171,7 @@ export const Landing = () => {
                       <Button 
                         size="lg" 
                         className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-semibold glow-primary"
-                        onClick={() => navigate(hasCompletedAssessment ? '/dashboard' : '/details-form')}
+                        onClick={() => navigate(hasCompletedAssessment ? '/dashboard' : (isDebugMode ? '/details-form?debug=true' : '/details-form'))}
                       >
                         {hasCompletedAssessment ? 'View Your Dashboard' : 'Begin Your Journey'}
                         <ArrowRight className="ml-2" size={20} />

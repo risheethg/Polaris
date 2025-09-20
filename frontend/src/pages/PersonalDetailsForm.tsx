@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -26,6 +26,7 @@ interface UserDetails {
 export const PersonalDetailsForm = () => {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [details, setDetails] = useState<UserDetails>({
     current_role: '',
     years_of_experience: 0,
@@ -40,6 +41,27 @@ export const PersonalDetailsForm = () => {
     },
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('debug') === 'true') {
+      setDetails({
+        current_role: 'Software Engineer',
+        years_of_experience: 5,
+        education_level: "Bachelor's Degree",
+        financial_status: {
+          current_salary: 85000,
+          household_income: 120000,
+          monthly_expenses: 4000,
+          dependents: 1,
+          target_salary: 100000,
+          risk_tolerance: 'medium',
+        },
+      });
+      toast.info("Debug mode enabled: Personal details have been pre-filled.");
+    }
+  }, [location.search]);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -98,7 +120,8 @@ export const PersonalDetailsForm = () => {
       }
       
       // On success, navigate to the assessment page
-      navigate('/assessment');
+      const isDebug = new URLSearchParams(location.search).get('debug') === 'true';
+      navigate(isDebug ? '/assessment?debug=true' : '/assessment');
       return response.json();
     };
 

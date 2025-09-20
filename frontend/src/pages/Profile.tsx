@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import { GlassCard } from '@/components/GlassCard'; // This component is not in context, but I will assume it exists
-import { Button } from '@/components/ui/button'; // This component is not in context, but I will assume it exists
+import { GlassCard } from '@/components/GlassCard';
+import { Button } from '@/components/ui/button';
 import { Loader2, RefreshCw, Map, User as UserIcon } from 'lucide-react'; // Added UserIcon
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
+  // ... (imports)
   Radar,
   RadarChart,
   PolarGrid,
@@ -14,6 +15,7 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from 'recharts';
+import { useDebug } from '@/context/DebugContext';
 
 interface UserProfileData {
   name: string;
@@ -34,6 +36,7 @@ const riasecFullNames: { [key: string]: string } = {
 export const Profile = () => {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const { isDebugMode } = useDebug();
   const [profile, setProfile] = useState<UserProfileData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -145,7 +148,7 @@ export const Profile = () => {
           <p className="text-muted-foreground mb-4">
             Feel like your interests have changed? You can always take the assessment again.
           </p>
-          <Button variant="outline" className="w-full" onClick={() => navigate('/assessment')}>
+          <Button variant="outline" className="w-full" onClick={() => navigate(isDebugMode ? '/assessment?debug=true' : '/assessment')}>
             <RefreshCw className="mr-2 h-4 w-4" />
             Start Over
           </Button>
