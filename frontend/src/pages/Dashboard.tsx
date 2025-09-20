@@ -19,6 +19,7 @@ interface CareerData {
   category: 'tech' | 'creative' | 'business' | 'science' | 'health';
   x: number;
   y: number;
+  z: number;
   size: 'small' | 'medium' | 'large';
   description: string;
   skills?: string[];
@@ -79,6 +80,7 @@ export const Dashboard = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [hoveredCareer, setHoveredCareer] = useState<CareerData | null>(null);
+  const [cameraZoom, setCameraZoom] = useState(1);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -152,13 +154,14 @@ export const Dashboard = () => {
               category = clusterCategoryMapping[dominantTrait] || 'business';
             }
 
-            // Generate more natural positions for the stars within a cluster
-            const baseAngle = (job.cluster_label / clusterProfiles.length) * 2 * Math.PI;
-            const angleOffset = (Math.random() - 0.5) * (Math.PI / 4); // Allow some angular spread
-            const finalAngle = baseAngle + angleOffset;
-            const radius = 30 + Math.random() * 25; // Randomize distance from center
-            const x = radius * Math.cos(finalAngle);
-            const y = radius * Math.sin(finalAngle);
+            // Generate 3D positions for the stars within a spherical volume
+            const radius = 15 + Math.random() * 10; // Keep clusters tight
+            const phi = Math.acos(2 * Math.random() - 1); // Polar angle (from -1 to 1)
+            const theta = Math.random() * 2 * Math.PI; // Azimuthal angle
+
+            const x = radius * Math.sin(phi) * Math.cos(theta);
+            const y = radius * Math.sin(phi) * Math.sin(theta);
+            const z = radius * Math.cos(phi);
 
             return {
               id: job.title.toLowerCase().replace(/[\s/()]+/g, '-'),
@@ -167,6 +170,7 @@ export const Dashboard = () => {
               category: category,
               x: x,
               y: y,
+              z: z,
               size: 'medium' as 'medium',
             };
           });
@@ -220,6 +224,7 @@ export const Dashboard = () => {
           recommendedPath={recommendedPath} 
           onStarClick={handleCareerClick}
           onStarHover={id => setHoveredCareer(careerConstellations.find(c => c.id === id) || null)}
+          cameraZoom={cameraZoom}
         />
         <CareerLegend />
         {hoveredCareer && (
