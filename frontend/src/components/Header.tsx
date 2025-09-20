@@ -45,13 +45,13 @@ export const Header = () => {
         </Link>
 
         <div className="flex items-center gap-4">
-          <div className="flex items-center justify-center space-x-2">
+          {/* <div className="flex items-center justify-center space-x-2">
             <TestTube2 size={16} className="text-muted-foreground" />
             <Label htmlFor="debug-mode-header" className="text-muted-foreground text-sm">
               Debug Mode
             </Label>
             <Switch id="debug-mode-header" checked={isDebugMode} onCheckedChange={setIsDebugMode} />
-          </div>
+          </div> */}
 
           {user ? (
             <>
