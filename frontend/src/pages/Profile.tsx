@@ -3,9 +3,10 @@ import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { GlassCard } from '@/components/GlassCard';
 import { Button } from '@/components/ui/button';
-import { Loader2, RefreshCw, Map } from 'lucide-react';
+import { Loader2, RefreshCw, Map, User as UserIcon } from 'lucide-react'; // Added UserIcon
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
+  // ... (imports)
   Radar,
   RadarChart,
   PolarGrid,
@@ -14,6 +15,7 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from 'recharts';
+import { useDebug } from '@/context/DebugContext';
 
 interface UserProfileData {
   name: string;
@@ -34,6 +36,7 @@ const riasecFullNames: { [key: string]: string } = {
 export const Profile = () => {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const { isDebugMode } = useDebug();
   const [profile, setProfile] = useState<UserProfileData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -129,7 +132,7 @@ export const Profile = () => {
         </div>
       </GlassCard>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-3 gap-6">
         <GlassCard hover>
           <h3 className="text-xl font-heading font-semibold mb-3">View Your Career Map</h3>
           <p className="text-muted-foreground mb-4">
@@ -145,9 +148,19 @@ export const Profile = () => {
           <p className="text-muted-foreground mb-4">
             Feel like your interests have changed? You can always take the assessment again.
           </p>
-          <Button variant="outline" className="w-full" onClick={() => navigate('/assessment')}>
+          <Button variant="outline" className="w-full" onClick={() => navigate(isDebugMode ? '/assessment?debug=true' : '/assessment')}>
             <RefreshCw className="mr-2 h-4 w-4" />
             Start Over
+          </Button>
+        </GlassCard>
+        <GlassCard hover>
+          <h3 className="text-xl font-heading font-semibold mb-3">Update Your Details</h3>
+          <p className="text-muted-foreground mb-4">
+            Keep your personal and financial details up-to-date for better recommendations.
+          </p>
+          <Button className="w-full" onClick={() => navigate('/details-form')}>
+            <UserIcon className="mr-2 h-4 w-4" />
+            Edit Details
           </Button>
         </GlassCard>
       </div>

@@ -1,62 +1,173 @@
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stars as DreiStars, Line } from '@react-three/drei';
-import { Star } from './Star';
+import { useRef, useMemo } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Stars, OrbitControls, Line, shaderMaterial } from '@react-three/drei';
 import * as THREE from 'three';
 
 interface CareerData {
   id: string;
   title: string;
-  category: 'tech' | 'creative' | 'business' | 'science' | 'health';
   x: number;
   y: number;
+  z: number;
   size: 'small' | 'medium' | 'large';
-  [key: string]: any; // Allow other properties
+  category: string;
 }
 
 interface SceneProps {
   careers: CareerData[];
   recommendedPath: string[];
   onStarClick: (id: string) => void;
+  onStarHover: (id: string | null) => void;
+  cameraZoom?: number;
 }
 
-const sizeMap = { small: 0.3, medium: 0.5, large: 0.7 };
-const colorMap = {
-  tech: '#5DADE2',
-  creative: '#AF7AC5',
-  business: '#F5B041',
-  science: '#48C9B0',
-  health: '#EC7063',
+const categoryColors: { [key: string]: string } = {
+  tech: '#60a5fa',       // blue-400
+  creative: '#c084fc',   // purple-400
+  business: '#4ade80',   // green-400
+  science: '#facc15',    // yellow-400
+  health: '#f87171',     // red-400
 };
 
-export const Scene = ({ careers, recommendedPath, onStarClick }: SceneProps) => {
-  const pathPoints = recommendedPath.map(id => {
-    const career = careers.find(c => c.id === id);
-    if (!career) return new THREE.Vector3(0, 0, 0); // Should not happen
-    // Ensure this logic matches the position calculation in Star component
-    return new THREE.Vector3((career.x - 50) / 4, (career.y - 50) / 4, (career.id.charCodeAt(0) % 10 - 5) * 1.5);
-  }).filter(p => p); // Filter out any potential nulls
+const StarMaterial = shaderMaterial(
+  {
+    uColor: new THREE.Color(1.0, 1.0, 1.0),
+    uTime: 0,
+  },
+  // Vertex Shader
+  `
+    varying vec3 vNormal;
+    void main() {
+      vNormal = normalize(normalMatrix * normal);
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+  // Fragment Shader
+  `
+    uniform vec3 uColor;
+    varying vec3 vNormal;
+    void main() {
+      float intensity = pow(0.7 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
+      gl_FragColor = vec4(uColor, 1.0) * intensity;
+    }
+  `
+);
+
+const Star = ({ career, onClick, onHover }: { career: CareerData, onClick: (id: string) => void, onHover: (id: string | null) => void }) => {
+  const meshRef = useRef<THREE.Mesh>(null!);
+  const size = career.size === 'large' ? 1.5 : career.size === 'medium' ? 1 : 0.7;
+  const color = categoryColors[career.category] || '#ffffff';
+
+  useFrame(({ clock }) => { // Subtle pulsing effect
+    if (meshRef.current) {
+      const pulse = Math.sin(clock.getElapsedTime() * 2 + career.x) * 0.1 + 0.9;
+      meshRef.current.scale.set(size * pulse, size * pulse, size * pulse);
+    }
+  });
 
   return (
-    <Canvas camera={{ position: [0, 0, 25], fov: 75 }}>
+    <mesh
+      ref={meshRef}
+      position={[career.x, career.y, career.z]}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick(career.id);
+      }}
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        onHover(career.id);
+        document.body.style.cursor = 'pointer';
+      }}
+      onPointerOut={(e) => {
+        e.stopPropagation();
+        onHover(null);
+        document.body.style.cursor = 'auto';
+      }}
+    >
+      <sphereGeometry args={[0.5, 32, 32]} />
+      <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.6} toneMapped={false} />
+    </mesh>
+  );
+};
+
+const ConstellationPath = ({ careers, path }: { careers: CareerData[], path: string[] }) => {
+  const points = useMemo(() => {
+    const careerMap = new Map(careers.map(c => [c.id, c]));
+    const pathPoints = path
+      .map(id => careerMap.get(id))
+      .filter((c): c is CareerData => !!c)
+      .map(c => new THREE.Vector3(c.x, c.y, c.z));
+    return pathPoints;
+  }, [careers, path]);
+
+  if (points.length < 2) return null;
+
+  return (
+    <Line
+      points={points}
+      color="white"
+      lineWidth={1}
+    />
+  );
+};
+
+const RotatingStars = () => {
+  const starsRef = useRef<any>();
+  useFrame(() => {
+    if (starsRef.current) {
+      starsRef.current.rotation.x += 0.00001;
+      starsRef.current.rotation.y += 0.000001;
+    }
+  });
+
+  return (
+    <Stars
+      ref={starsRef}
+      radius={200}      // Increased radius for a larger feel
+      depth={100}       // More depth
+      count={20000}     // More stars for a denser field
+      factor={5}        // Star size factor
+      saturation={0.5}    // Add a bit of color
+      fade              // Stars fade near the camera
+      speed={0.5}       // Twinkling speed
+    />
+  );
+};
+
+export const Scene = ({ careers, recommendedPath, onStarClick, onStarHover, cameraZoom = 1 }: SceneProps) => {
+  return (
+    <Canvas
+      camera={{ position: [0, 0, 80], fov: 60, zoom: cameraZoom }}
+      onPointerMissed={() => onStarHover(null)}
+    >
       <ambientLight intensity={0.2} />
-      <pointLight position={[10, 10, 10]} intensity={1} />
-      <DreiStars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-      {careers.map(career => {
-        // Use a deterministic z-position so lines connect properly
-        const zPos = (career.id.charCodeAt(0) % 10 - 5) * 1.5;
-        return (
-          <Star key={career.id} id={career.id} position={[(career.x - 50) / 4, (career.y - 50) / 4, zPos]} size={sizeMap[career.size]} color={colorMap[career.category]} label={career.title} pulsing={recommendedPath.includes(career.id)} onClick={onStarClick} />
-        )
-      })}
-      {pathPoints.length > 1 && (
-        <Line 
-          points={pathPoints} 
-          color="hsl(var(--primary))" 
-          lineWidth={1.5} 
-          transparent 
-          opacity={0.7} />
-      )}
-      <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
+      <pointLight position={[0, 0, 50]} intensity={1} color="lightblue" />
+      
+      <RotatingStars />
+
+      {careers.map(career => (
+        <Star
+          key={career.id}
+          career={career}
+          onClick={onStarClick}
+          onHover={onStarHover}
+        />
+      ))}
+
+      <ConstellationPath careers={careers} path={recommendedPath} />
+
+      <OrbitControls
+        enablePan={true}
+        enableZoom={true}
+        enableRotate={true}
+        zoomSpeed={0.5}
+        panSpeed={0.5}
+        rotateSpeed={0.4}
+        minDistance={20}
+        maxDistance={200}
+      />
     </Canvas>
   );
 };
+
+export default Scene;

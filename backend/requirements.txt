@@ -11,3 +11,6 @@ gcsfs
 fsspec
 google-cloud-storage
 joblib
+google-cloud-aiplatform
+google-cloud-aiplatform
+langchain-google-genai

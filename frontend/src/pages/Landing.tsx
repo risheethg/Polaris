@@ -75,11 +75,18 @@ export const Landing = () => {
       const provider = new GoogleAuthProvider();
       try {
         const result = await signInWithPopup(auth, provider);
-        const idToken = await result.user.getIdToken();
+        const { user } = result;
+        const idToken = await user.getIdToken();
   
         const headers = {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${idToken}`
+        };
+
+        const registrationPayload = {
+          name: user.displayName,
+          email: user.email,
+          picture: user.photoURL,
         };
 
         // 1. Try to register the user first
@@ -87,6 +94,13 @@ export const Landing = () => {
           method: 'POST',
           headers,
         });
+
+        // If registration is successful (new user), navigate them directly to the details form.
+        if (response.status === 201) {
+          navigate('/details-form');
+          resolve(result.user);
+          return;
+        }
 
         // 2. If the user already exists (409 Conflict), then log them in.
         if (response.status === 409) {
@@ -102,7 +116,6 @@ export const Landing = () => {
           throw new Error(`Server error: ${response.status}`);
         }
   
-        navigate(isDebugMode ? '/assessment?debug=true' : '/assessment');
         // 4. Check for personality data to decide where to navigate.
         const meResponse = await fetch('http://127.0.0.1:8000/api/v1/users/me', {
           method: 'GET',
@@ -112,9 +125,9 @@ export const Landing = () => {
         if (meResponse.ok) {
           const userData = await meResponse.json();
           setHasCompletedAssessment(!!userData.personality);
-          navigate(userData.personality ? '/dashboard' : (isDebugMode ? '/assessment?debug=true' : '/assessment')); // Navigate after sign-in
+          navigate(userData.personality ? '/dashboard' : (isDebugMode ? '/assessment?debug=true' : '/details-form')); // Navigate after sign-in
         } else {
-          navigate(isDebugMode ? '/assessment?debug=true' : '/assessment'); // Fallback to assessment on error
+          navigate(isDebugMode ? '/assessment?debug=true' : '/details-form'); // Fallback to assessment on error
         }
         resolve(result.user);
       } catch (error) {
@@ -158,7 +171,7 @@ export const Landing = () => {
                       <Button 
                         size="lg" 
                         className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-semibold glow-primary"
-                        onClick={() => navigate(hasCompletedAssessment ? '/dashboard' : (isDebugMode ? '/assessment?debug=true' : '/assessment'))}
+                        onClick={() => navigate(hasCompletedAssessment ? '/dashboard' : (isDebugMode ? '/details-form?debug=true' : '/details-form'))}
                       >
                         {hasCompletedAssessment ? 'View Your Dashboard' : 'Begin Your Journey'}
                         <ArrowRight className="ml-2" size={20} />

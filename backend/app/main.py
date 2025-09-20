@@ -14,7 +14,10 @@ from app.core.logger import logs
 from app.core.firebase import initialize_firebase
 from app.routes.auth import router as auth_router
 from app.routes.kmeans import router as kmeans_router
+from app.routes.level_test import router as level_test_router
 from app.routes.assessment import router as assessment_router
+from app.routes.career_map import router as career_map_router
+
 
 
 @asynccontextmanager
@@ -89,6 +92,8 @@ app.add_middleware(
 app.include_router(auth_router, prefix="/api/v1/users")
 app.include_router(kmeans_router, prefix="/api/v1/ml")
 app.include_router(assessment_router, prefix="/api/v1/assessments")
+app.include_router(level_test_router, prefix="/api/v1/level-test")
+app.include_router(career_map_router, prefix="/api/v1/career-map")
 
 @app.get("/")
 def read_root():

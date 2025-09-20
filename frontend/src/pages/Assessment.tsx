@@ -82,6 +82,7 @@ export const Assessment = () => {
       const debugAnswers = Array.from({ length: questions.length - 1 }, (_, i) => (i % 5));
       setAnswers(debugAnswers);
       setCurrentQuestion(questions.length - 1);
+      setSelectedOption(2); // Set a default selected option to enable submission
       toast.info("Debug mode enabled. Starting at the last question.");
     }
   }, [location.search]);
