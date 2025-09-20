@@ -15,40 +15,24 @@ interface CareerMapStep {
 interface CareerStep3DProps {
   step: CareerMapStep;
   position: THREE.Vector3;
+  parentPosition: THREE.Vector3;
 }
 
-const ySpacing = -75;
-const xSpacing = 45;
-
-export const CareerStep3D = ({ step, position }: CareerStep3DProps) => {
-  const nextStepPositions = step.next_steps.map((_, index) => {
-    const numSteps = step.next_steps.length;
-    const xOffset = (index - (numSteps - 1) / 2) * xSpacing;
-    return new THREE.Vector3(position.x + xOffset, position.y + ySpacing, position.z);
-  });
-
+export const CareerStep3D = ({ step, position, parentPosition }: CareerStep3DProps) => {
   return (
     <group position={position}>
       <Html center>
         <CareerStep step={step} />
       </Html>
 
-      {/* Render lines to next steps */}
-      {nextStepPositions.map((nextPos, index) => (
-        <Line
-          key={index}
-          points={[new THREE.Vector3(0, 0, 0), nextPos.clone().sub(position)]}
-          color="hsl(var(--primary))"
-          lineWidth={1}
-          transparent
-          opacity={0.3}
-        />
-      ))}
-
-      {/* Recursively render next steps */}
-      {step.next_steps.map((nextStep, index) => (
-        <CareerStep3D key={index} step={nextStep} position={nextStepPositions[index].clone().sub(position)} />
-      ))}
+      {/* Render line from parent to this step */}
+      <Line
+        points={[new THREE.Vector3(0, 0, 0), parentPosition.clone().sub(position)]}
+        color="hsl(var(--primary))"
+        lineWidth={1.5}
+        transparent
+        opacity={0.25}
+      />
     </group>
   );
 };

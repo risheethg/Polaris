@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import { Canvas } from '@react-three/fiber';
@@ -109,26 +109,44 @@ const ErrorState = ({ message }: { message: string }) => (
 
 const CareerMapScene: React.FC<CareerMapSceneProps> = ({ data }) => {
   // Recursive function to render steps and their children
-  const renderSteps = (steps: CareerMapStep[], parentPosition: THREE.Vector3, level = 0) => {
+  const renderSteps = (steps: CareerMapStep[], parentPosition: THREE.Vector3, level = 0): { elements: JSX.Element[], width: number } => {
     const elements: JSX.Element[] = [];
-    const yOffset = -80; // Vertical spacing between levels
-    const xSpread = 100; // Horizontal spread for branches
+    const yOffset = 45; // Vertical spacing between levels
+    const xPadding = 30; // Horizontal padding between sibling branches
+    const baseCardWidth = 50; // A base width for leaf nodes to ensure they have space
+    let totalWidth = 0;
+    const childPositions: { x: number, position: THREE.Vector3 }[] = [];
 
-    steps.forEach((step, index) => {
-      // Calculate position for the current step
-      const totalWidth = (steps.length - 1) * xSpread; // How wide the current level of nodes is
-      const x = parentPosition.x - totalWidth / 2 + index * xSpread; // Center the children under the parent
+    // First pass: render children and calculate their widths
+    const childrenData = steps.map(step => {
+      const childResult = renderSteps(step.next_steps, new THREE.Vector3(), level + 1);
+      // A node's width is its children's total width, or a base width if it has no children.
+      const childWidth = Math.max(baseCardWidth, childResult.width);
+      return { step, childElements: childResult.elements, width: childWidth };
+    });
+
+    // Calculate total width of this level
+    totalWidth = childrenData.reduce((acc, child, index) => acc + child.width + (index > 0 ? xPadding : 0), 0);
+
+    // Second pass: position this level's nodes based on calculated widths
+    // Only center the very first level of nodes.
+    let currentX = parentPosition.x - totalWidth / 2;
+
+    childrenData.forEach(({ step, childElements, width }) => {
+      const x = currentX + width / 2; // Center the node in its allocated space
       const y = parentPosition.y + yOffset; // Move down for the next level
       const z = 0; // Lock to a 2D plane
-      const currentPosition = new THREE.Vector3(x, y, z); 
+      const currentPosition = new THREE.Vector3(x, y, z);
 
-      // Add the 3D step component
-      elements.push(<CareerStep3D key={`${level}-${index}`} step={step} position={currentPosition} parentPosition={parentPosition} />);
+      // Add the current step's 3D component
+      elements.push(<CareerStep3D key={`${level}-${step.title}`} step={step} position={currentPosition} parentPosition={parentPosition} />);
+      
+      // Add its children, now correctly positioned relative to this step
+      childElements.forEach(child => elements.push(React.cloneElement(child, { ...child.props, key: `${child.key}-cloned`, position: child.props.position.clone().add(currentPosition) })));
 
-      // Recursively render next steps
-      elements.push(...renderSteps(step.next_steps, currentPosition, level + 1));
+      currentX += width + xPadding;
     });
-    return elements;
+    return { elements, width: totalWidth };
   };
 
   return (
@@ -149,7 +167,7 @@ const CareerMapScene: React.FC<CareerMapSceneProps> = ({ data }) => {
           factor={4} saturation={0} fade speed={1}
         />
         <group position={[0, 15, 0]}>
-          {renderSteps(data.steps, new THREE.Vector3(0, 0, 0))}
+          {renderSteps(data.steps, new THREE.Vector3(0, 0, 0)).elements}
         </group>
         <OrbitControls 
           enablePan={true}
