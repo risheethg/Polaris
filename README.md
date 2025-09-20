@@ -1,8 +1,8 @@
-# Welcome to your Lovable project
 # Polaris: Your Personal Career Navigator
 
-## Project info
 Polaris is an innovative web application designed to guide users on their professional journey. By leveraging AI-powered personality assessments and data-driven insights, Polaris helps users discover their ideal career paths and provides a personalized, step-by-step roadmap to achieve their goals. The platform visualizes career opportunities as a "constellation," making career exploration intuitive and inspiring.
+
+## ✨ Features
 
 - **AI-Powered Personality Assessment**: Utilizes the Holland Codes (RIASEC) model to analyze a user's personality and suggest fitting career clusters.
 - **Interactive Career Constellation**: A 3D visualization of potential career paths, allowing users to explore various job opportunities in an engaging way.
@@ -138,3 +138,11 @@ Polaris/
 -   **`LevelAssessment.tsx`**: A quiz to determine a user's skill level for a specific job.
 -   **`CareerMap.tsx`**: Visualizes the AI-generated, step-by-step career path.
 -   **`Profile.tsx`**: User profile page with personality chart and options to update details or retake assessments.
+
+## 💡 Debug Mode
+
+The application includes a debug mode to accelerate testing by pre-filling forms and assessments. To enable it, append `?debug=true` to the URL on the relevant pages (`/details-form`, `/assessment`).
+
+---
+
+This README provides a solid foundation for your project. You can expand it further with sections on deployment and contribution guidelines.
