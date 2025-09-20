@@ -54,7 +54,7 @@ export const ConstellationNode = ({
         colorClasses[color],
         active && 'ring-2 ring-primary',
         pulsing && 'pulse-star',
-        isHovered && 'scale-150 shadow-lg',
+        (isHovered || active) && 'scale-150 shadow-lg',
         'shadow-[0_0_10px_currentColor]'
       )} />
       

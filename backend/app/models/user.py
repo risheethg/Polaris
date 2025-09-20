@@ -24,5 +24,5 @@ class User(UserBase):
     
     # Example fields for your application's data
     interests: List[str] = []
-    personality_results: Optional[Dict[str, Any]] = None
+    personality: Optional[Dict[str, Any]] = None
     career_map: Optional[Dict[str, Any]] = None

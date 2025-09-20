@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { GlassCard } from '@/components/GlassCard';
-import { PolarisLogo } from '@/components/PolarisLogo';
-import { ConstellationNode } from '@/components/ConstellationNode';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Star, TrendingUp, MapPin, Clock } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Star, TrendingUp, MapPin, Clock, Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription
+} from '@/components/ui/dialog';
+import { Scene } from '@/components/Scene';
+import { aStar, AStarNode } from '@/lib/a-star';
 
 interface CareerData {
   id: string;
@@ -19,284 +22,212 @@ interface CareerData {
   salary: string;
   growth: string;
   timeToEntry: string;
+  riasec: { [key: string]: number };
+}
+
+interface UserProfile {
+  name: string;
+  personality: { [key: string]: number };
+}
+
+interface RiasecTrait {
+  name: string;
+  description: string;
 }
 
 const careerConstellations: CareerData[] = [
-  // Tech Constellation
-  { id: 'swe', title: 'Software Engineer', category: 'tech', x: 20, y: 30, size: 'large', description: 'Build applications and systems that power the digital world', skills: ['Programming', 'Problem Solving', 'Debugging'], salary: '$95k - $180k', growth: '+22%', timeToEntry: '6-12 months' },
-  { id: 'ds', title: 'Data Scientist', category: 'tech', x: 25, y: 40, size: 'medium', description: 'Extract insights from data to drive business decisions', skills: ['Statistics', 'Python/R', 'Machine Learning'], salary: '$100k - $190k', growth: '+35%', timeToEntry: '12-18 months' },
-  { id: 'ux', title: 'UX Designer', category: 'creative', x: 30, y: 20, size: 'medium', description: 'Design intuitive and beautiful user experiences', skills: ['Design Thinking', 'Prototyping', 'User Research'], salary: '$85k - $140k', growth: '+13%', timeToEntry: '6-12 months' },
+  // Tech & Data Cluster
+  { id: 'swe', title: 'Software Engineer', category: 'tech', x: 20, y: 30, size: 'large', description: 'Designs, develops, and maintains software applications.', skills: ['Programming', 'Problem Solving', 'Algorithms'], salary: '$95k - $180k', growth: '+22%', timeToEntry: '6-12 months', riasec: { R: 0.8, I: 0.7, C: 0.6 } },
+  { id: 'ds', title: 'Data Scientist', category: 'tech', x: 25, y: 40, size: 'medium', description: 'Extracts insights from data to drive business decisions.', skills: ['Statistics', 'Python/R', 'Machine Learning'], salary: '$100k - $190k', growth: '+35%', timeToEntry: '12-18 months', riasec: { I: 0.9, R: 0.6, C: 0.5 } },
+  { id: 'cloud', title: 'Cloud Architect', category: 'tech', x: 15, y: 22, size: 'medium', description: 'Designs and manages cloud computing infrastructure.', skills: ['AWS/Azure/GCP', 'Networking', 'Security'], salary: '$120k - $210k', growth: '+15%', timeToEntry: '18-36 months', riasec: { I: 0.7, C: 0.7, R: 0.6 } },
+  { id: 'devops', title: 'DevOps Engineer', category: 'tech', x: 28, y: 25, size: 'medium', description: 'Automates and streamlines software development and operations.', skills: ['CI/CD', 'Docker', 'Kubernetes'], salary: '$105k - $170k', growth: '+20%', timeToEntry: '12-24 months', riasec: { R: 0.8, C: 0.7 } },
   
-  // Creative Constellation
-  { id: 'gd', title: 'Graphic Designer', category: 'creative', x: 70, y: 25, size: 'medium', description: 'Create visual communications that inspire and inform', skills: ['Adobe Creative Suite', 'Typography', 'Brand Design'], salary: '$50k - $85k', growth: '+3%', timeToEntry: '3-6 months' },
-  { id: 'cw', title: 'Content Writer', category: 'creative', x: 75, y: 35, size: 'small', description: 'Craft compelling stories and content for diverse audiences', skills: ['Writing', 'SEO', 'Content Strategy'], salary: '$45k - $75k', growth: '+8%', timeToEntry: '1-3 months' },
-  { id: 'vd', title: 'Video Director', category: 'creative', x: 80, y: 45, size: 'medium', description: 'Direct and produce engaging video content', skills: ['Cinematography', 'Editing', 'Storytelling'], salary: '$60k - $120k', growth: '+18%', timeToEntry: '6-12 months' },
+  // Creative & Design Cluster
+  { id: 'ux', title: 'UX Designer', category: 'creative', x: 35, y: 15, size: 'medium', description: 'Designs intuitive and beautiful user experiences.', skills: ['Design Thinking', 'Prototyping', 'User Research'], salary: '$85k - $140k', growth: '+13%', timeToEntry: '6-12 months', riasec: { A: 0.8, I: 0.6, S: 0.5 } },
+  { id: 'gd', title: 'Graphic Designer', category: 'creative', x: 70, y: 25, size: 'medium', description: 'Creates visual communications that inspire and inform.', skills: ['Adobe Suite', 'Typography', 'Branding'], salary: '$50k - $85k', growth: '+3%', timeToEntry: '3-6 months', riasec: { A: 0.9, E: 0.4 } },
+  { id: 'cw', title: 'Content Writer', category: 'creative', x: 75, y: 35, size: 'small', description: 'Crafts compelling stories and content for diverse audiences.', skills: ['Writing', 'SEO', 'Content Strategy'], salary: '$45k - $75k', growth: '+8%', timeToEntry: '1-3 months', riasec: { A: 0.8, I: 0.5 } },
+  { id: 'animator', title: '3D Animator', category: 'creative', x: 65, y: 18, size: 'medium', description: 'Brings characters and worlds to life through animation.', skills: ['Maya/Blender', 'Rigging', 'Motion Graphics'], salary: '$60k - $110k', growth: '+16%', timeToEntry: '12-24 months', riasec: { A: 0.9, R: 0.6 } },
   
-  // Business Constellation
-  { id: 'pm', title: 'Product Manager', category: 'business', x: 45, y: 60, size: 'large', description: 'Lead product strategy and drive innovation', skills: ['Strategy', 'Analytics', 'Communication'], salary: '$110k - $200k', growth: '+19%', timeToEntry: '12-24 months' },
-  { id: 'ba', title: 'Business Analyst', category: 'business', x: 50, y: 70, size: 'medium', description: 'Analyze business processes and recommend improvements', skills: ['Analysis', 'Requirements Gathering', 'SQL'], salary: '$70k - $120k', growth: '+14%', timeToEntry: '6-12 months' },
-  { id: 'sm', title: 'Sales Manager', category: 'business', x: 55, y: 50, size: 'medium', description: 'Drive revenue growth and manage client relationships', skills: ['Sales', 'Negotiation', 'CRM'], salary: '$80k - $150k', growth: '+7%', timeToEntry: '6-18 months' },
+  // Business & Management Cluster
+  { id: 'pm', title: 'Product Manager', category: 'business', x: 45, y: 60, size: 'large', description: 'Leads product strategy and drives innovation.', skills: ['Strategy', 'Analytics', 'Communication'], salary: '$110k - $200k', growth: '+19%', timeToEntry: '12-24 months', riasec: { E: 0.9, I: 0.7, C: 0.5 } },
+  { id: 'ba', title: 'Business Analyst', category: 'business', x: 50, y: 70, size: 'medium', description: 'Analyzes business processes and recommends improvements.', skills: ['Analysis', 'Requirements Gathering', 'SQL'], salary: '$70k - $120k', growth: '+14%', timeToEntry: '6-12 months', riasec: { C: 0.8, I: 0.7, E: 0.5 } },
+  { id: 'mktg', title: 'Marketing Manager', category: 'business', x: 60, y: 55, size: 'medium', description: 'Develops and executes marketing campaigns.', skills: ['Digital Marketing', 'Analytics', 'Branding'], salary: '$80k - $140k', growth: '+10%', timeToEntry: '8-16 months', riasec: { E: 0.8, S: 0.6, A: 0.5 } },
+  { id: 'hr', title: 'HR Specialist', category: 'business', x: 55, y: 78, size: 'small', description: 'Manages employee relations, recruitment, and benefits.', skills: ['Communication', 'Recruiting', 'Labor Law'], salary: '$60k - $95k', growth: '+7%', timeToEntry: '4-8 months', riasec: { S: 0.8, C: 0.7, E: 0.6 } },
   
-  // Science Constellation
-  { id: 'res', title: 'Research Scientist', category: 'science', x: 15, y: 70, size: 'medium', description: 'Conduct cutting-edge research to advance human knowledge', skills: ['Research Methods', 'Statistical Analysis', 'Technical Writing'], salary: '$85k - $140k', growth: '+8%', timeToEntry: '24-48 months' },
-  { id: 'bio', title: 'Biotechnologist', category: 'science', x: 20, y: 80, size: 'small', description: 'Apply biological principles to develop new technologies', skills: ['Biology', 'Laboratory Techniques', 'Innovation'], salary: '$75k - $125k', growth: '+7%', timeToEntry: '18-36 months' },
+  // Science & Research Cluster
+  { id: 'res', title: 'Research Scientist', category: 'science', x: 15, y: 70, size: 'medium', description: 'Conducts cutting-edge research to advance knowledge.', skills: ['Research Methods', 'Analysis', 'Writing'], salary: '$85k - $140k', growth: '+8%', timeToEntry: '24-48 months', riasec: { I: 0.9, A: 0.5 } },
+  { id: 'bio', title: 'Biotechnologist', category: 'science', x: 20, y: 80, size: 'small', description: 'Applies biology to develop new technologies.', skills: ['Biology', 'Lab Techniques', 'Innovation'], salary: '$75k - $125k', growth: '+7%', timeToEntry: '18-36 months', riasec: { I: 0.8, R: 0.7 } },
+  { id: 'env', title: 'Environmental Scientist', category: 'science', x: 10, y: 60, size: 'medium', description: 'Protects the environment and human health.', skills: ['Field Work', 'Data Analysis', 'Policy'], salary: '$60k - $100k', growth: '+8%', timeToEntry: '12-24 months', riasec: { I: 0.8, R: 0.7, S: 0.4 } },
   
-  // Health Constellation
-  { id: 'nurse', title: 'Registered Nurse', category: 'health', x: 85, y: 70, size: 'large', description: 'Provide compassionate care and support to patients', skills: ['Patient Care', 'Medical Knowledge', 'Empathy'], salary: '$75k - $95k', growth: '+7%', timeToEntry: '24-36 months' },
-  { id: 'therapist', title: 'Physical Therapist', category: 'health', x: 90, y: 60, size: 'medium', description: 'Help patients recover and improve their physical function', skills: ['Anatomy', 'Rehabilitation', 'Communication'], salary: '$85k - $105k', growth: '+18%', timeToEntry: '36-48 months' },
+  // Health & Wellness Cluster
+  { id: 'nurse', title: 'Registered Nurse', category: 'health', x: 85, y: 70, size: 'large', description: 'Provides compassionate care and support to patients.', skills: ['Patient Care', 'Medical Knowledge', 'Empathy'], salary: '$75k - $95k', growth: '+7%', timeToEntry: '24-36 months', riasec: { S: 0.9, R: 0.5 } },
+  { id: 'therapist', title: 'Physical Therapist', category: 'health', x: 90, y: 60, size: 'medium', description: 'Helps patients recover and improve physical function.', skills: ['Anatomy', 'Rehabilitation', 'Communication'], salary: '$85k - $105k', growth: '+18%', timeToEntry: '36-48 months', riasec: { S: 0.8, R: 0.6, I: 0.5 } },
+  { id: 'nutritionist', title: 'Nutritionist', category: 'health', x: 80, y: 80, size: 'small', description: 'Advises on diet and nutrition for health and wellness.', skills: ['Dietetics', 'Counseling', 'Biology'], salary: '$55k - $80k', growth: '+11%', timeToEntry: '12-24 months', riasec: { S: 0.8, I: 0.7 } },
 ];
 
 export const Dashboard = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const { user, loading: authLoading } = useAuth();
   const [selectedCareer, setSelectedCareer] = useState<CareerData | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [recommendedPath, setRecommendedPath] = useState<string[]>([]);
-  const [userProfile, setUserProfile] = useState<{
-    name: string;
-    primaryCategory: 'tech' | 'creative' | 'business' | 'science' | 'health';
-    skills: string[];
-  }>({
-    name: 'Future Professional',
-    primaryCategory: 'tech',
-    skills: ['Problem Solving', 'Analytical Thinking', 'Communication']
-  });
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate AI analysis based on assessment answers
-    const answers = location.state?.answers || [];
-    
-    // Simple logic to determine career path based on most selected category
-    const categoryScore = { tech: 0, creative: 0, business: 0, science: 0, health: 0 };
-    answers.forEach((answer: number) => {
-      const categories = ['tech', 'creative', 'business', 'science', 'health'];
-      if (categories[answer]) {
-        categoryScore[categories[answer] as keyof typeof categoryScore]++;
+    const fetchUserData = async () => {
+      if (user) {
+        try {
+          const idToken = await user.getIdToken();
+          const response = await fetch('http://127.0.0.1:8000/api/v1/users/me', {
+            headers: { 'Authorization': `Bearer ${idToken}` }
+          });
+          if (!response.ok) throw new Error("Failed to fetch user data");
+          
+          const data = await response.json();
+          if (!data.personality) {
+            // If no personality data, user hasn't taken assessment. Redirect them.
+            navigate('/assessment');
+            return;
+          }
+          setUserProfile(data);
+
+          // Simple recommendation logic based on top 3 RIASEC scores
+          const sortedPersonality = Object.entries(data.personality)
+            .sort(([, a], [, b]) => (b as number) - (a as number))
+            .map(([key]) => key);
+
+          const recommendedCareers = careerConstellations
+            .map(career => {
+              let score = 0;
+              for (const trait in career.riasec) {
+                if (data.personality[trait]) {
+                  score += data.personality[trait] * career.riasec[trait];
+                }
+              }
+              return { ...career, matchScore: score };
+            })
+            .sort((a, b) => b.matchScore - a.matchScore)
+            .slice(0, 3) // Get top 3 matched careers
+            .map(c => c.id);
+            
+          setRecommendedPath(recommendedCareers);
+
+        } catch (error) {
+          console.error("Dashboard Error:", error);
+          navigate('/assessment'); // Redirect on error
+        } finally {
+          setLoading(false);
+        }
       }
-    });
-    
-    const primaryCategory = Object.entries(categoryScore).reduce((a, b) => 
-      categoryScore[a[0] as keyof typeof categoryScore] > categoryScore[b[0] as keyof typeof categoryScore] ? a : b
-    )[0] as 'tech' | 'creative' | 'business' | 'science' | 'health';
-    
-    setUserProfile(prev => ({ ...prev, primaryCategory }));
-    
-    // Set recommended path based on primary category
-    const categoryPaths = {
-      tech: ['ux', 'swe', 'ds'],
-      creative: ['gd', 'ux', 'vd'],
-      business: ['ba', 'pm', 'sm'],
-      science: ['res', 'bio', 'ds'],
-      health: ['therapist', 'nurse', 'res']
     };
-    
-    setRecommendedPath(categoryPaths[primaryCategory]);
-  }, [location.state]);
+
+    if (!authLoading) {
+      fetchUserData();
+    }
+  }, [user, authLoading, navigate]);
 
   const handleCareerClick = (careerId: string) => {
     const career = careerConstellations.find(c => c.id === careerId);
     setSelectedCareer(career || null);
+    setIsModalOpen(true);
   };
 
+  // A* Pathfinding Logic
+  useEffect(() => {
+    if (userProfile && recommendedPath.length > 1) {
+      const startNode = careerConstellations.find(c => c.id === recommendedPath[0]);
+      // For demo, let's target the second recommended career. This could be user-selected.
+      const goalNode = careerConstellations.find(c => c.id === recommendedPath[1]);
+
+      if (startNode && goalNode) {
+        const getPosition = (node: CareerData) => ({
+          x: (node.x - 50) / 4,
+          y: (node.y - 50) / 4,
+          z: 0, // Simplified for now, can be randomized like in Scene.tsx
+        });
+
+        const distance = (a: CareerData, b: CareerData) => {
+          const posA = getPosition(a);
+          const posB = getPosition(b);
+          // Euclidean distance
+          return Math.sqrt(
+            Math.pow(posA.x - posB.x, 2) +
+            Math.pow(posA.y - posB.y, 2) +
+            Math.pow(posA.z - posB.z, 2)
+          );
+        };
+
+        const path = aStar({
+          start: startNode,
+          goal: goalNode,
+          getNeighbors: (node) => careerConstellations.filter(c => c.id !== node.id),
+          distance: distance, // g(n) - actual distance
+          heuristic: distance, // h(n) - estimated distance (Euclidean is a perfect heuristic here)
+        });
+
+        setRecommendedPath(path.map(p => p.id));
+      }
+    }
+  }, [userProfile]); // Rerun when user profile and initial recommendations are loaded
+
+  if (loading || authLoading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <p className="mt-4 text-muted-foreground">Loading your career map...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen relative overflow-hidden bg-background">
-      
-      <div className="relative z-10 min-h-screen flex flex-col">
-        {/* Header */}
-        <header className="p-6">
-          <nav className="max-w-7xl mx-auto flex justify-between items-center">
-            <PolarisLogo size="sm" />
-            <div className="flex items-center gap-4">
-              <span className="text-muted-foreground">Welcome back, {userProfile.name}</span>
-              <Button variant="ghost" onClick={() => navigate('/')} className="text-foreground hover:text-primary">
-                <ArrowLeft className="mr-2" size={16} />
-                Home
-              </Button>
-            </div>
-          </nav>
-        </header>
+    <div className="h-[calc(100vh-3.5rem)] w-full relative">
+      <div className="text-center mb-8 absolute top-6 left-1/2 -translate-x-1/2 z-20">
+        <h1 className="text-4xl font-heading font-bold mb-2">Your Career Constellation</h1>
+        <p className="text-muted-foreground">
+          Orbit, zoom, and click on any star to explore your opportunities.
+        </p>
+      </div>
 
-        <div className="flex-1 flex">
-          {/* Main Constellation View */}
-          <div className="flex-1 relative p-6">
-            <div className="h-full relative">
-              <div className="text-center mb-8">
-                <h1 className="text-4xl font-heading font-bold mb-2">Your Career Constellation</h1>
-                <p className="text-muted-foreground">
-                  Navigate your personalized career map. Click on any star to explore opportunities.
-                </p>
-              </div>
-              
-              {/* Constellation Canvas */}
-              <div className="relative h-96 bg-gradient-to-br from-card/20 to-transparent rounded-2xl border border-border/50 overflow-hidden">
-                {/* Background grid */}
-                <div className="absolute inset-0 opacity-10">
-                  <div className="h-full w-full" style={{
-                    backgroundImage: 'radial-gradient(circle, rgba(0,255,255,0.3) 1px, transparent 1px)',
-                    backgroundSize: '40px 40px'
-                  }} />
-                </div>
-                
-                {/* Career Nodes */}
-                {careerConstellations.map((career) => (
-                  <ConstellationNode
-                    key={career.id}
-                    id={career.id}
-                    x={career.x}
-                    y={career.y}
-                    size={career.size}
-                    color={career.category}
-                    active={selectedCareer?.id === career.id}
-                    pulsing={recommendedPath.includes(career.id)}
-                    onClick={handleCareerClick}
-                    label={career.title}
-                  />
-                ))}
-                
-                {/* Recommended Path Lines */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none">
-                  {recommendedPath.slice(0, -1).map((careerIdStart, index) => {
-                    const startCareer = careerConstellations.find(c => c.id === careerIdStart);
-                    const endCareer = careerConstellations.find(c => c.id === recommendedPath[index + 1]);
-                    if (!startCareer || !endCareer) return null;
-                    
-                    return (
-                      <line
-                        key={`${careerIdStart}-${endCareer.id}`}
-                        x1={`${startCareer.x}%`}
-                        y1={`${startCareer.y}%`}
-                        x2={`${endCareer.x}%`}
-                        y2={`${endCareer.y}%`}
-                        stroke="hsl(var(--primary))"
-                        strokeWidth="2"
-                        strokeDasharray="4 4"
-                        className="constellation-line opacity-70"
-                      />
-                    );
-                  })}
-                </svg>
-              </div>
-              
-              {/* Legend */}
-              <div className="mt-6 flex justify-center gap-6 text-sm">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-constellation-tech"></div>
-                  <span>Technology</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-constellation-creative"></div>
-                  <span>Creative</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-constellation-business"></div>
-                  <span>Business</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-constellation-science"></div>
-                  <span>Science</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-constellation-health"></div>
-                  <span>Health</span>
-                </div>
-              </div>
-            </div>
-          </div>
+      <Scene careers={careerConstellations} recommendedPath={recommendedPath} onStarClick={handleCareerClick} />
 
-          {/* Career Details Sidebar */}
-          <div className="w-96 p-6 space-y-6">
-            {selectedCareer ? (
-              <GlassCard className="space-y-6">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="text-2xl font-heading font-bold">{selectedCareer.title}</h3>
-                    <Badge variant="secondary" className="mt-2 capitalize">
-                      {selectedCareer.category}
-                    </Badge>
-                  </div>
-                  <Star className={`text-constellation-${selectedCareer.category}`} size={24} />
-                </div>
-                
-                <p className="text-muted-foreground">{selectedCareer.description}</p>
-                
+      {/* Details Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="max-w-2xl">
+          {selectedCareer && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-3xl font-heading">{selectedCareer.title}</DialogTitle>
+                <DialogDescription>{selectedCareer.description}</DialogDescription>
+              </DialogHeader>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
                 <div className="space-y-4">
                   <div>
-                    <h4 className="font-semibold mb-2 flex items-center gap-2">
-                      <TrendingUp size={16} />
-                      Salary Range
-                    </h4>
+                    <h4 className="font-semibold mb-2 flex items-center gap-2 text-muted-foreground"><TrendingUp size={16} /> Salary Range</h4>
                     <p className="text-lg font-bold text-secondary">{selectedCareer.salary}</p>
                   </div>
-                  
                   <div>
-                    <h4 className="font-semibold mb-2 flex items-center gap-2">
-                      <MapPin size={16} />
-                      Job Growth
-                    </h4>
-                    <p className="text-accent font-bold">{selectedCareer.growth} (10-year outlook)</p>
+                    <h4 className="font-semibold mb-2 flex items-center gap-2 text-muted-foreground"><MapPin size={16} /> Job Growth</h4>
+                    <p className="text-lg font-bold text-accent">{selectedCareer.growth} <span className="text-sm font-normal text-muted-foreground">(10-year outlook)</span></p>
                   </div>
-                  
                   <div>
-                    <h4 className="font-semibold mb-2 flex items-center gap-2">
-                      <Clock size={16} />
-                      Time to Entry
-                    </h4>
+                    <h4 className="font-semibold mb-2 flex items-center gap-2 text-muted-foreground"><Clock size={16} /> Time to Entry</h4>
                     <p>{selectedCareer.timeToEntry}</p>
                   </div>
-                  
-                  <div>
-                    <h4 className="font-semibold mb-2">Key Skills</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedCareer.skills.map((skill) => (
-                        <Badge key={skill} variant="outline">{skill}</Badge>
-                      ))}
-                    </div>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">Key Skills</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedCareer.skills.map((skill) => (
+                      <Badge key={skill} variant="outline">{skill}</Badge>
+                    ))}
                   </div>
                 </div>
-                
-                <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-                  Get Roadmap
-                </Button>
-              </GlassCard>
-            ) : (
-              <GlassCard className="text-center space-y-4">
-                <Star className="mx-auto text-muted-foreground" size={48} />
-                <div>
-                  <h3 className="text-xl font-heading font-bold">Explore Your Options</h3>
-                  <p className="text-muted-foreground mt-2">
-                    Click on any star in your constellation to learn more about career opportunities.
-                  </p>
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  ✨ Pulsing stars are part of your recommended path
-                </div>
-              </GlassCard>
-            )}
-            
-            {/* Recommended Path */}
-            <GlassCard>
-              <h3 className="text-lg font-heading font-bold mb-4">Your Recommended Path</h3>
-              <div className="space-y-3">
-                {recommendedPath.map((careerId, index) => {
-                  const career = careerConstellations.find(c => c.id === careerId);
-                  if (!career) return null;
-                  
-                  return (
-                    <div key={careerId} className="flex items-center gap-3">
-                      <div className="text-xl font-bold text-muted-foreground">{index + 1}</div>
-                      <div 
-                        className="flex-1 cursor-pointer hover:text-primary transition-colors"
-                        onClick={() => handleCareerClick(careerId)}
-                      >
-                        {career.title}
-                      </div>
-                    </div>
-                  );
-                })}
               </div>
-            </GlassCard>
-          </div>
-        </div>
-      </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
