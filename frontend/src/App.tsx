@@ -6,13 +6,16 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { Landing } from "./pages/Landing";
 import { Assessment } from "./pages/Assessment";
+import { LevelAssessment } from './pages/LevelAssessment';
 import { Results } from "./pages/Results";
 import { Dashboard } from "./pages/Dashboard";
+import { CareerMap } from './pages/CareerMap';
 import { Profile } from './pages/Profile';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Layout } from './components/Layout';
 import NotFound from "./pages/NotFound";
 import { DebugProvider } from "@/context/DebugContext";
+import { PersonalDetails } from './pages/PersonalDetails';
 
 const queryClient = new QueryClient();
 
@@ -38,9 +41,24 @@ const AppRoutes = () => {
               <Dashboard />
             </ProtectedRoute>
           } />
+          <Route path="/level-assessment/:mapId" element={
+            <ProtectedRoute>
+              <LevelAssessment />
+            </ProtectedRoute>
+          } />
           <Route path="/profile" element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          } />
+          <Route path="/details" element={
+            <ProtectedRoute>
+              <PersonalDetails />
+            </ProtectedRoute>
+            } />
+          <Route path="/career-map/:mapId" element={
+            <ProtectedRoute>
+              <CareerMap />
             </ProtectedRoute>
           } />
         </Route>

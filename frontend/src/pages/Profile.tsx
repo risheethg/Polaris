@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import { GlassCard } from '@/components/GlassCard';
-import { Button } from '@/components/ui/button';
-import { Loader2, RefreshCw, Map } from 'lucide-react';
+import { GlassCard } from '@/components/GlassCard'; // This component is not in context, but I will assume it exists
+import { Button } from '@/components/ui/button'; // This component is not in context, but I will assume it exists
+import { Loader2, RefreshCw, Map, User as UserIcon } from 'lucide-react'; // Added UserIcon
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Radar,
@@ -129,7 +129,7 @@ export const Profile = () => {
         </div>
       </GlassCard>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-3 gap-6">
         <GlassCard hover>
           <h3 className="text-xl font-heading font-semibold mb-3">View Your Career Map</h3>
           <p className="text-muted-foreground mb-4">
@@ -148,6 +148,16 @@ export const Profile = () => {
           <Button variant="outline" className="w-full" onClick={() => navigate('/assessment')}>
             <RefreshCw className="mr-2 h-4 w-4" />
             Start Over
+          </Button>
+        </GlassCard>
+        <GlassCard hover>
+          <h3 className="text-xl font-heading font-semibold mb-3">Update Your Details</h3>
+          <p className="text-muted-foreground mb-4">
+            Keep your personal and financial details up-to-date for better recommendations.
+          </p>
+          <Button className="w-full" onClick={() => navigate('/details')}>
+            <UserIcon className="mr-2 h-4 w-4" />
+            Edit Details
           </Button>
         </GlassCard>
       </div>

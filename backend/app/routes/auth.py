@@ -5,6 +5,7 @@ from app.core.security import get_current_user_token, get_current_active_user
 
 # Import the models and the repository
 from app.models.user import User, UserCreate
+from app.models.user_details import UserDetailsUpdate
 from app.repos.users_repo import users_repo
 
 router = APIRouter(tags=["Users"])
@@ -66,3 +67,22 @@ async def read_current_user(
     The dependency `get_current_active_user` does all the work.
     """
     return current_user
+
+
+@router.patch("/me", response_model=User)
+async def update_user_details(
+    details: UserDetailsUpdate,
+    current_user: User = Depends(get_current_active_user),
+):
+    """
+    Update personal details for the currently authenticated user.
+    """
+    updated_user = await users_repo.update(
+        uid=current_user.uid,
+        data_to_update=details.model_dump(exclude_unset=True, by_alias=False)
+    )
+    if not updated_user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found."
+        )
+    return updated_user
