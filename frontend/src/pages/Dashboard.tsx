@@ -12,6 +12,7 @@ import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { aStar, AStarNode } from '@/lib/a-star';
+import { apiConfig } from '@/lib/api-config';
 
 interface CareerData {
   id: string;
@@ -87,7 +88,7 @@ export const Dashboard = () => {
       if (user) {
         try {
           const idToken = await user.getIdToken();
-          const response = await fetch('http://127.0.0.1:8000/api/v1/users/me', {
+          const response = await fetch(apiConfig.endpoints.users.me, {
             headers: { 'Authorization': `Bearer ${idToken}` }
           });
           if (!response.ok) throw new Error("Failed to fetch user data");
@@ -101,7 +102,7 @@ export const Dashboard = () => {
           setUserProfile(data);
 
           // Fetch the recommended jobs to draw the constellation path
-          const recommendResponse = await fetch('http://127.0.0.1:8000/api/v1/ml/jobs/recommend', {
+          const recommendResponse = await fetch(apiConfig.endpoints.ml.recommend, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -122,7 +123,7 @@ export const Dashboard = () => {
           }
 
           // Fetch all cluster profiles to categorize jobs
-          const clusterProfilesResponse = await fetch('http://127.0.0.1:8000/api/v1/ml/jobs/cluster-profiles', {
+          const clusterProfilesResponse = await fetch(apiConfig.endpoints.ml.clusterProfiles, {
             headers: {
               'Authorization': `Bearer ${idToken}`
             }
@@ -134,7 +135,7 @@ export const Dashboard = () => {
           const clusterProfiles: ClusterProfile[] = await clusterProfilesResponse.json();
 
           // Fetch all jobs from the backend.
-          const allJobsResponse = await fetch('http://127.0.0.1:8000/api/v1/ml/jobs/all', {
+          const allJobsResponse = await fetch(apiConfig.endpoints.ml.allJobs, {
              headers: { 'Authorization': `Bearer ${idToken}` }
           });
           if (!allJobsResponse.ok) {

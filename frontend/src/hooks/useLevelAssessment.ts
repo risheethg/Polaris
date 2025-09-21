@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { apiConfig } from '@/lib/api-config';
 
 interface QuizQuestion {
   question_text: string;
@@ -43,7 +44,7 @@ export const useLevelAssessment = (mapId: string | undefined) => {
       setLoading(true);
       try {
         const idToken = await user.getIdToken();
-        const response = await fetch('http://127.0.0.1:8000/api/v1/level-test/generate-quiz', {
+        const response = await fetch(apiConfig.endpoints.levelTest.generateQuiz, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -95,7 +96,7 @@ export const useLevelAssessment = (mapId: string | undefined) => {
     setSubmitting(true);
     try {
       const idToken = await user.getIdToken();
-      const response = await fetch('http://127.0.0.1:8000/api/v1/level-test/submit-quiz', {
+      const response = await fetch(apiConfig.endpoints.levelTest.submitQuiz, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
         body: JSON.stringify({ user_id: user.uid, job_title: jobTitle, answers: userAnswers }),

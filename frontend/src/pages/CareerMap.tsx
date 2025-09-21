@@ -7,6 +7,7 @@ import * as THREE from 'three';
 import { CareerStep3D } from '@/components/CareerStep3D';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { apiConfig } from '@/lib/api-config';
 
 // --- Type Definitions ---
 interface CareerMapStep {
@@ -47,7 +48,7 @@ export const CareerMap = () => {
 
       try {
         const idToken = await user.getIdToken();
-        const response = await fetch('http://127.0.0.1:8000/api/v1/career-map/generate', {
+        const response = await fetch(apiConfig.endpoints.careerMap.generate, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

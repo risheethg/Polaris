@@ -7,6 +7,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { apiConfig } from '@/lib/api-config';
 
 const questions = [
   // Realistic
@@ -99,7 +100,7 @@ export const Assessment = () => {
     setIsSubmitting(true);
     try {
       const idToken = await user.getIdToken();
-      const response = await fetch('http://127.0.0.1:8000/api/v1/assessments', {
+      const response = await fetch(apiConfig.endpoints.assessments, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
