@@ -1,5 +1,13 @@
 // API configuration utility
-const API_BASE_URL = (import.meta as any).env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
+
+// This line now strictly requires VITE_API_BASE_URL to be set in your environment file (.env.production).
+// The build will fail if it's missing, preventing a deployment with an incorrect API URL.
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+// We add a check to ensure the app crashes loudly during development if the variable is missing.
+if (!API_BASE_URL) {
+  throw new Error("VITE_API_BASE_URL is not defined. Please check your .env file.");
+}
 
 export const apiConfig = {
   baseURL: API_BASE_URL,

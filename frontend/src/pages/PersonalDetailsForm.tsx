@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, Send } from 'lucide-react';
 import { toast } from 'sonner';
+import { apiConfig } from '@/lib/api-config';
 
 interface UserDetails {
   current_role: string;
@@ -106,7 +107,7 @@ export const PersonalDetailsForm = () => {
 
     const promise = async () => {
       const idToken = await user.getIdToken();
-      const response = await fetch('http://127.0.0.1:8000/api/v1/users/me', {
+      const response = await fetch(apiConfig.endpoints.users.me, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

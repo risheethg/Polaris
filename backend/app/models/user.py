@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List, Dict, Any
 
 # Import the FinancialStatus model to be used as a nested model
@@ -10,10 +10,19 @@ class UserBase(BaseModel):
     This model is used as the response_model in API endpoints.
     """
     uid: str = Field(..., description="The unique user ID from Firebase.")
-    email: Optional[EmailStr] = Field(None, description="The user's email address.")
+    email: Optional[str] = Field(None, description="The user's email address.")
     name: Optional[str] = Field(None, description="The user's display name.")
     picture: Optional[str] = Field(None, description="URL to the user's profile picture.")
     email_verified: bool = Field(False, description="Whether the user's email is verified.")
+    
+    @field_validator('email', mode='before')
+    @classmethod
+    def validate_email(cls, v):
+        # Allow None, empty string, or any string value
+        # This prevents EmailStr validation errors
+        if v is None or v == "":
+            return None
+        return str(v) if v else None
 
     class Config:
         # This allows the model to be created from dictionary keys that match field names.

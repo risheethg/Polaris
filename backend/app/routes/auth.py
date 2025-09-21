@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, status, HTTPException
+from fastapi import APIRouter, Depends, status, HTTPException, Request
+from pydantic import BaseModel
+from typing import Optional
 
 # Import the correct dependencies from your updated security.py
 from app.core.security import get_current_user_token, get_current_active_user
@@ -10,19 +12,40 @@ from app.repos.users_repo import users_repo
 
 router = APIRouter(tags=["Users"])
 
+class UserRegistrationData(BaseModel):
+    name: Optional[str] = None
+    email: Optional[str] = None  # Allow email to be sent from frontend
+    picture: Optional[str] = None
 
 @router.post("/register", status_code=status.HTTP_201_CREATED, response_model=User)
 async def register_user(
-    # This route needs a valid token, but the user might not be in our DB yet.
-    # So we use the token-only dependency.
+    request: Request,  # Get raw request to debug
     decoded_token: dict = Depends(get_current_user_token)
 ):
     """
     Handles first-time user registration.
-    It takes a valid Firebase ID token, extracts user info,
+    It takes a valid Firebase ID token AND optional user data from the request body,
     and creates a new user profile document in Firestore.
     """
+    import logging
+    import json
+    logger = logging.getLogger(__name__)
+    
+    # Get request body manually
+    try:
+        body = await request.body()
+        registration_data = json.loads(body) if body else {}
+        logger.info(f"Raw request body: {body}")
+        logger.info(f"Parsed registration data: {registration_data}")
+    except Exception as e:
+        logger.error(f"Failed to parse request body: {e}")
+        registration_data = {}
+    
     user_uid = decoded_token.get("uid")
+    
+    # Debug logging
+    logger.info(f"Registration attempt - UID: {user_uid}")
+    logger.info(f"Token data: {decoded_token}")
     
     # Check if the user already exists in Firestore
     if await users_repo.get(user_uid):
@@ -31,10 +54,36 @@ async def register_user(
             detail="This user has already been registered."
         )
 
-    # Create a user object from the token data and create it in the DB
-    user_to_create = UserCreate(**decoded_token)
-    created_user = await users_repo.create(obj_in=user_to_create)
-    return created_user
+    # Create user data combining token info and request body data
+    try:
+        user_data = UserCreate(
+            uid=user_uid,
+            email=registration_data.get("email") or decoded_token.get("email"),  # Prefer frontend data, fall back to token
+            name=registration_data.get("name"),  # From request body
+            picture=registration_data.get("picture"),  # From request body
+            email_verified=decoded_token.get("email_verified", False)
+        )
+        logger.info(f"UserCreate data: {user_data.model_dump()}")
+    except Exception as e:
+        logger.error(f"UserCreate validation error: {e}")
+        logger.error(f"Registration data: {registration_data}")
+        logger.error(f"Token data: {decoded_token}")
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=f"Validation error: {str(e)}"
+        )
+    
+    try:
+        logger.info("Attempting to create user in Firestore...")
+        created_user = await users_repo.create(obj_in=user_data)
+        logger.info(f"User created successfully: {created_user.uid}")
+        return created_user
+    except Exception as e:
+        logger.error(f"Firestore creation error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Database error: {str(e)}"
+        )
 
 
 @router.post("/token", response_model=User)

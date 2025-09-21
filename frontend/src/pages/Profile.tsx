@@ -16,6 +16,7 @@ import {
   Tooltip,
 } from 'recharts';
 import { useDebug } from '@/context/DebugContext';
+import { apiConfig } from '@/lib/api-config';
 
 interface UserProfileData {
   name: string;
@@ -45,7 +46,7 @@ export const Profile = () => {
       if (user) {
         try {
           const idToken = await user.getIdToken();
-          const response = await fetch('http://127.0.0.1:8000/api/v1/users/me', {
+          const response = await fetch(apiConfig.endpoints.users.me, {
             headers: { Authorization: `Bearer ${idToken}` },
           });
 

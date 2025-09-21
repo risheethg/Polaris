@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, Star, Telescope, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { apiConfig } from '@/lib/api-config';
 
 interface Personality {
   [key: string]: number;
@@ -45,7 +46,7 @@ export const Results = () => {
           const idToken = await user.getIdToken();
           // Poll the backend until the personality vector is available
           const poll = async (retries = 10, delay = 1500): Promise<Personality> => {
-            const response = await fetch('http://127.0.0.1:8000/api/v1/users/me', {
+            const response = await fetch(apiConfig.endpoints.users.me, {
               headers: { Authorization: `Bearer ${idToken}` },
             });
             if (!response.ok) throw new Error('Failed to fetch user data');

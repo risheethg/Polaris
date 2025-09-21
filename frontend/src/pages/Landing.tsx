@@ -3,6 +3,7 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { GlassCard } from '@/components/GlassCard';
 import { PolarisLogo } from '@/components/PolarisLogo'; // Keep for hero
 import { ArrowRight, Loader2, Navigation, Sparkles, Target } from 'lucide-react';
+import { apiConfig } from '@/lib/api-config';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useDebug } from '@/context/DebugContext';
@@ -36,7 +37,7 @@ export const Landing = () => {
       if (user && !loading) {
         try {
           const idToken = await user.getIdToken();
-          const response = await fetch('http://127.0.0.1:8000/api/v1/users/me', { headers: { 'Authorization': `Bearer ${idToken}` } });
+          const response = await fetch(apiConfig.endpoints.users.me, { headers: { 'Authorization': `Bearer ${idToken}` } });
           if (response.ok) {
             const userData = await response.json();
             setHasCompletedAssessment(!!userData.personality);
@@ -90,9 +91,10 @@ export const Landing = () => {
         };
 
         // 1. Try to register the user first
-        let response = await fetch('http://127.0.0.1:8000/api/v1/users/register', {
+        let response = await fetch(apiConfig.endpoints.users.register, {
           method: 'POST',
           headers,
+          body: JSON.stringify(registrationPayload)
         });
 
         // If registration is successful (new user), navigate them directly to the details form.
@@ -105,7 +107,7 @@ export const Landing = () => {
         // 2. If the user already exists (409 Conflict), then log them in.
         if (response.status === 409) {
           console.log("User already registered. Attempting to log in.");
-          response = await fetch('http://127.0.0.1:8000/api/v1/users/token', {
+          response = await fetch(apiConfig.endpoints.users.token, {
             method: 'POST',
             headers,
           });
@@ -117,7 +119,7 @@ export const Landing = () => {
         }
   
         // 4. Check for personality data to decide where to navigate.
-        const meResponse = await fetch('http://127.0.0.1:8000/api/v1/users/me', {
+        const meResponse = await fetch(apiConfig.endpoints.users.me, {
           method: 'GET',
           headers,
         });

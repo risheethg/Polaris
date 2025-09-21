@@ -18,7 +18,11 @@ def get_current_user_token(
     Use this for endpoints like /register where you only need the token
     to be valid, but don't need the user to exist in your database yet.
     """
+    import logging
+    logger = logging.getLogger(__name__)
+    
     if not credentials:
+        logger.error("No authentication credentials provided")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Authentication credentials were not provided",
@@ -26,10 +30,14 @@ def get_current_user_token(
         )
     
     token = credentials.credentials
+    logger.info(f"Attempting to verify Firebase token (length: {len(token)})")
+    
     try:
         decoded_token = auth.verify_id_token(token)
+        logger.info(f"Token verified successfully for user: {decoded_token.get('uid')}")
         return decoded_token
     except auth.InvalidIdTokenError as e:
+        logger.error(f"Invalid Firebase token: {e}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=f"Invalid Firebase token: {e}",
