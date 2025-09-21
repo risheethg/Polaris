@@ -17,3 +17,7 @@ app/scripts/
 # Docker
 Dockerfile
 .dockerignore
+
+# Secrets / credentials (do not send to Docker build context)
+firebase-key.json
+serviceAccountKey.json

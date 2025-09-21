@@ -1,5 +1,6 @@
 .env
 serviceAccountKey.json
+firebase-key.json
 
 __pycache__/
 logger/
