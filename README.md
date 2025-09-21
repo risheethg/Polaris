@@ -2,6 +2,14 @@
 
 Polaris is an innovative web application designed to guide users on their professional journey. By leveraging AI-powered personality assessments and data-driven insights, Polaris helps users discover their ideal career paths and provides a personalized, step-by-step roadmap to achieve their goals. The platform visualizes career opportunities as a "constellation," making career exploration intuitive and inspiring.
 
+## 🌐 Live Application
+
+**🚀 [Access Polaris Live Application](https://career-planner-frontend-339983439986.us-central1.run.app)**
+
+- **Frontend**: https://career-planner-frontend-339983439986.us-central1.run.app
+- **Backend API**: https://career-planner-api-339983439986.us-central1.run.app
+- **API Documentation**: https://career-planner-api-339983439986.us-central1.run.app/docs
+
 ## ✨ Features
 
 - **AI-Powered Personality Assessment**: Utilizes the Holland Codes (RIASEC) model to analyze a user's personality and suggest fitting career clusters.
@@ -14,118 +22,161 @@ Polaris is an innovative web application designed to guide users on their profes
 ## 🛠️ Tech Stack
 
 ### Frontend
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **Framework**: [Vite](https://vitejs.dev/) + [React](https://reactjs.org/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **UI Library**: [shadcn/ui](https://ui.shadcn.com/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Authentication**: [Firebase Auth](https://firebase.google.com/docs/auth)
+- **Deployment**: [Google Cloud Run](https://cloud.google.com/run)
 
 ### Backend
-
-**Use your preferred IDE**
 - **Framework**: [FastAPI](https://fastapi.tiangolo.com/)
 - **Language**: [Python](https://www.python.org/)
 - **AI/LLM Integration**: [LangChain](https://www.langchain.com/) with Google Gemini
 - **Database**: [Firestore](https://firebase.google.com/docs/firestore)
 - **Authentication**: Firebase Admin SDK
+- **Deployment**: [Google Cloud Run](https://cloud.google.com/run)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Infrastructure
+- **Containerization**: Docker
+- **Container Registry**: Google Container Registry
+- **Cloud Platform**: Google Cloud Platform
+- **CI/CD**: Docker + Google Cloud Run
 ## 🚀 Getting Started
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-To get the Polaris frontend running locally, follow these steps.
-
-Follow these steps:
 ### Prerequisites
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
 - [Node.js](https://nodejs.org/) (v18 or later recommended)
 - [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
-- A Firebase project set up with Google Authentication enabled.
+- [Docker](https://www.docker.com/) (for local development)
+- A Firebase project set up with Google Authentication enabled
+- Google Cloud Platform account (for deployment)
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-### Installation & Setup
+### Local Development Setup
 
-# Step 3: Install the necessary dependencies.
-npm i
-1.  **Clone the repository:**
-    ```sh
-    git clone <YOUR_GIT_URL>
-    cd Polaris/frontend
-    ```
+#### Frontend Setup
+```sh
+# Clone the repository
+git clone <YOUR_GIT_URL>
+cd CareerPlanner/frontend
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Install dependencies
+npm install
+
+# Set up environment variables
+# Create a .env.local file and add your Firebase configuration
+cp .env.local.template .env.local
+# Edit .env.local with your Firebase config
+
+# Start the development server
 npm run dev
 ```
-2.  **Install dependencies:**
-    ```sh
-    npm install
-    ```
 
-**Edit a file directly in GitHub**
-3.  **Set up environment variables:**
+#### Backend Setup
+```sh
+# Navigate to backend directory
+cd ../backend
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-    Create a `.env.local` file in the `frontend` directory and add your Firebase project configuration keys:
+# Install Python dependencies
+pip install -r requirements.txt
 
-**Use GitHub Codespaces**
-    ```env
-    VITE_FIREBASE_API_KEY="your-api-key"
-    VITE_FIREBASE_AUTH_DOMAIN="your-auth-domain"
-    VITE_FIREBASE_PROJECT_ID="your-project-id"
-    VITE_FIREBASE_STORAGE_BUCKET="your-storage-bucket"
-    VITE_FIREBASE_MESSAGING_SENDER_ID="your-messaging-sender-id"
-    VITE_FIREBASE_APP_ID="your-app-id"
-    ```
+# Set up Firebase credentials
+# Place your firebase-key.json file in the backend directory
+
+# Start the backend server
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8080
+```
+
+### Docker Development
+```sh
+# Build and run both frontend and backend
+docker-compose up --build
+
+# Frontend will be available at http://localhost:8080
+# Backend will be available at http://localhost:8000
+```
 
 ## 🐳 Docker Setup
 
-Alternatively, you can run the entire application stack using Docker and Docker Compose.
+### Local Docker Development
 
-### Prerequisites
+```sh
+# Clone the repository
+git clone <YOUR_GIT_URL>
+cd CareerPlanner
 
-- Docker
-- A Firebase Admin SDK service account key file (`serviceAccountKey.json`).
+# Place your Firebase service account key
+# Copy firebase-key.json to the backend/ directory
 
-### Running with Docker
+# Build and run the containers
+docker-compose up --build
 
-1.  **Place Firebase credentials:** Put your `serviceAccountKey.json` file in the `backend/` directory.
+# Access the application
+# Frontend: http://localhost:8080
+# Backend: http://localhost:8000
+# API Documentation: http://localhost:8000/docs
+```
 
-2.  **Build and run the containers:**
-    ```sh
-    docker-compose up --build
-    ```
+## ☁️ Cloud Deployment
 
-3.  The frontend will be accessible at `http://localhost:8080` and the backend at `http://localhost:8000`.
+The application is deployed on Google Cloud Platform using Cloud Run for both frontend and backend services.
+
+### Deployment Architecture
+- **Frontend**: Containerized React app deployed to Google Cloud Run
+- **Backend**: Containerized FastAPI app deployed to Google Cloud Run  
+- **Database**: Google Firestore (NoSQL)
+- **Authentication**: Firebase Auth with Google Sign-In
+- **Container Registry**: Google Container Registry
+
+### Environment Configuration
+
+#### Frontend Environment Variables (.env.production)
+```env
+VITE_API_BASE_URL=https://career-planner-api-339983439986.us-central1.run.app
+VITE_FIREBASE_API_KEY=your-firebase-api-key
+VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your-project-id
+VITE_FIREBASE_STORAGE_BUCKET=your-project.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
+VITE_FIREBASE_APP_ID=your-app-id
+VITE_FIREBASE_MEASUREMENT_ID=your-measurement-id
+```
+
+#### Backend Configuration
+- Firebase service account key mounted as secret in Cloud Run
+- CORS configured for cross-origin requests
+- Health checks enabled for Cloud Run
 
 ## 📂 Project Structure
 
 ```
-Polaris/
+CareerPlanner/
 ├── backend/
 │   ├── app/
-│   │   ├── api/          # FastAPI endpoints
-│   │   ├── core/         # Core logic, AI services, prompts
-│   │   ├── models/       # Pydantic data models
-│   │   └── main.py       # FastAPI app entry point
-│   ├── serviceAccountKey.json # Firebase service account (gitignored)
-│   └── Dockerfile
+│   │   ├── core/          # Core configurations (DB, Firebase, Security)
+│   │   ├── models/        # Pydantic data models
+│   │   ├── repos/         # Data access layer
+│   │   ├── routes/        # FastAPI route handlers
+│   │   ├── services/      # Business logic services
+│   │   └── main.py        # FastAPI app entry point
+│   ├── scripts/           # ML training scripts and models
+│   ├── logger/            # Application logs
+│   ├── firebase-key.json  # Firebase service account (gitignored)
+│   ├── Dockerfile.api     # Production Docker image
+│   └── requirements.txt   # Python dependencies
 ├── frontend/
-│   ├── public/
+│   ├── public/            # Static assets
 │   ├── src/
-│   │   ├── assets/       # Static assets (images, etc.)
-│   │   ├── components/   # Reusable UI components (shadcn/ui)
-│   │   ├── lib/          # Utility functions and Firebase config
-│   │   ├── pages/        # Main application pages/routes
-│   │   └── App.tsx       # Main app component with routing
-│   ├── .env.local        # Environment variables (gitignored)
-│   └── Dockerfile.dev
-└── docker-compose.yaml   # Docker orchestration
+│   │   ├── components/    # Reusable UI components (shadcn/ui)
+│   │   ├── hooks/         # Custom React hooks
+│   │   ├── lib/           # Utility functions and configurations
+│   │   ├── pages/         # Main application pages/routes
+│   │   ├── context/       # React context providers
+│   │   └── App.tsx        # Main app component with routing
+│   ├── .env.production    # Production environment variables
+│   ├── Dockerfile.frontend # Production Docker image
+│   └── package.json       # Frontend dependencies
+├── scraper/               # Job data scraping utilities
+└── docker-compose.yaml   # Local development orchestration
 ```
 
 ## ⚙️ Key Components & Pages
@@ -141,8 +192,78 @@ Polaris/
 
 ## 💡 Debug Mode
 
-The application includes a debug mode to accelerate testing by pre-filling forms and assessments. To enable it, append `?debug=true` to the URL on the relevant pages (`/details-form`, `/assessment`).
+The application includes a debug mode to accelerate testing by pre-filling forms and assessments. To enable it, append `?debug=true` to the URL on the relevant pages:
+
+- Personal Details Form: `/details-form?debug=true`
+- Assessment: `/assessment?debug=true`
+
+## 🔧 API Endpoints
+
+The backend provides a comprehensive REST API. Key endpoints include:
+
+- `POST /api/v1/users/register` - User registration
+- `POST /api/v1/users/token` - User login
+- `GET /api/v1/users/me` - Get current user profile
+- `PATCH /api/v1/users/me` - Update user details
+- `POST /api/v1/assessments` - Submit personality assessment
+- `POST /api/v1/career-map/generate` - Generate career roadmap
+- `GET /api/v1/ml/jobs/recommend` - Get job recommendations
+- `POST /api/v1/level-test/generate-quiz` - Generate skill assessment
+
+Full API documentation is available at: https://career-planner-api-339983439986.us-central1.run.app/docs
+
+## 🚀 Deployment Instructions
+
+### Prerequisites
+- Google Cloud Platform account
+- Docker installed locally
+- Firebase project with authentication enabled
+
+### Deploy to Google Cloud Run
+
+1. **Set up environment variables:**
+   ```powershell
+   $env:PROJECT_ID = "your-gcp-project-id"
+   $env:REGION = "us-central1"
+   $env:FRONTEND_IMAGE_URI = "gcr.io/$env:PROJECT_ID/career-planner-frontend"
+   $env:API_IMAGE_URI = "gcr.io/$env:PROJECT_ID/career-planner-api"
+   ```
+
+2. **Build and push frontend:**
+   ```powershell
+   cd frontend
+   docker build -t $env:FRONTEND_IMAGE_URI -f Dockerfile.frontend .
+   docker push $env:FRONTEND_IMAGE_URI
+   gcloud run deploy career-planner-frontend --image=$env:FRONTEND_IMAGE_URI --platform=managed --region=$env:REGION --allow-unauthenticated --port=80
+   ```
+
+3. **Build and push backend:**
+   ```powershell
+   cd ../backend
+   docker build -t $env:API_IMAGE_URI -f Dockerfile.api .
+   docker push $env:API_IMAGE_URI
+   gcloud run deploy career-planner-api --image=$env:API_IMAGE_URI --platform=managed --region=$env:REGION --allow-unauthenticated --port=8080
+   ```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [Holland Codes (RIASEC)](https://en.wikipedia.org/wiki/Holland_Codes) for the personality assessment framework
+- [Google Gemini](https://ai.google.dev/) for AI-powered career insights
+- [shadcn/ui](https://ui.shadcn.com/) for the beautiful UI components
+- [Firebase](https://firebase.google.com/) for authentication and database services
 
 ---
 
-This README provides a solid foundation for your project. You can expand it further with sections on deployment and contribution guidelines.
+**Built with ❤️ for career explorers everywhere**
