@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Star, TrendingUp, MapPin, Clock, Loader2, User, Sparkles, Compass } from 'lucide-react';
+import { Star, TrendingUp, MapPin, Clock, Loader2, User, Sparkles, Compass, ZoomIn, ZoomOut, RefreshCw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import {
@@ -82,6 +82,7 @@ export const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [hoveredCareer, setHoveredCareer] = useState<CareerData | null>(null);
   const [cameraZoom, setCameraZoom] = useState(1);
+  const [showRecommended, setShowRecommended] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -210,13 +211,54 @@ export const Dashboard = () => {
 
   return (
     <div className="h-[calc(100vh-3.5rem)] w-full relative">
-      <div className="text-center mb-8 absolute top-6 left-1/2 -translate-x-1/2 z-20">
+      <div className="text-center mb-8 absolute top-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
         <h1 className="text-4xl font-heading font-bold mb-2">Your Career Constellation</h1>
         {userProfile && (
           <p className="text-muted-foreground">
             Welcome, {userProfile.name?.split(' ')[0] || 'Explorer'}! Orbit, zoom, and click on any star to explore your opportunities.
           </p>
         )}
+      </div>
+
+      {/* Top-right control panel */}
+      <div className="absolute top-6 right-6 z-30 flex items-center gap-3">
+        <div className="bg-background/60 backdrop-blur-sm p-2 rounded-lg border border-border/40 flex items-center gap-2">
+          <button
+            aria-label="Zoom in"
+            onClick={() => setCameraZoom(z => Math.min(2, +(z + 0.1).toFixed(2)))}
+            className="p-2 rounded hover:bg-accent/10"
+            title="Zoom in"
+          >
+            <ZoomIn className="h-4 w-4 text-primary" />
+          </button>
+          <div className="text-sm text-muted-foreground px-2">{Math.round(cameraZoom * 100)}%</div>
+          <button
+            aria-label="Zoom out"
+            onClick={() => setCameraZoom(z => Math.max(0.5, +(z - 0.1).toFixed(2)))}
+            className="p-2 rounded hover:bg-accent/10"
+            title="Zoom out"
+          >
+            <ZoomOut className="h-4 w-4 text-primary" />
+          </button>
+          <button
+            aria-label="Reset camera"
+            onClick={() => setCameraZoom(1)}
+            className="p-2 rounded hover:bg-accent/10"
+            title="Reset view"
+          >
+            <RefreshCw className="h-4 w-4 text-primary" />
+          </button>
+        </div>
+
+        <div className="bg-background/60 backdrop-blur-sm p-2 rounded-lg border border-border/40 flex items-center gap-3">
+          <div className="text-sm text-muted-foreground">
+            <div className="font-semibold">Recommended</div>
+            <div className="text-xs">{recommendedPath?.length ?? 0} careers</div>
+          </div>
+          <Button size="sm" variant="ghost" onClick={() => setShowRecommended(s => !s)}>
+            {showRecommended ? 'Hide Path' : 'View Path'}
+          </Button>
+        </div>
       </div>
 
       <main className="w-full h-full">
@@ -227,6 +269,9 @@ export const Dashboard = () => {
           onStarHover={id => setHoveredCareer(careerConstellations.find(c => c.id === id) || null)}
           cameraZoom={cameraZoom}
         />
+        {showRecommended && (
+          <RecommendedPanel ids={recommendedPath} careers={careerConstellations} onClick={handleCareerClick} />
+        )}
         <CareerLegend />
         {hoveredCareer && (
           <motion.div 
@@ -267,7 +312,7 @@ export const Dashboard = () => {
                 <div>
                   <h4 className="font-semibold mb-2">Key Skills</h4>
                   <div className="flex flex-wrap gap-2">
-                    {selectedCareer.skills.map((skill) => (
+                    {(selectedCareer.skills ?? []).map((skill) => (
                       <Badge key={skill} variant="outline">{skill}</Badge>
                     ))}
                   </div>
@@ -290,13 +335,31 @@ const CareerLegend = () => {
           <div key={riasecCode} className="flex items-center gap-3">
             <div className={cn('h-3 w-3 rounded-full', categoryColors[category])} />
             <div className="text-sm text-muted-foreground">
-              <span className="font-semibold">{riasecDetails[riasecCode].name}</span>
-              <span className="hidden md:inline">
-                {' '}
-                - {riasecDetails[riasecCode].description.split(' - ')[1]}
-              </span>
+              <div className="font-semibold">{riasecDetails[riasecCode].name}</div>
+              <div className="hidden md:block text-xs">{riasecDetails[riasecCode].description}</div>
             </div>
           </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Recommended path small panel
+const RecommendedPanel = ({ ids, careers, onClick }: { ids: string[]; careers: any[]; onClick: (id: string) => void }) => {
+  if (!ids?.length) return null;
+  const items = ids.map(id => careers.find(c => c.id === id)).filter(Boolean).slice(0, 6);
+  return (
+    <div className="absolute right-6 top-28 z-30 bg-background/70 backdrop-blur-sm p-3 rounded-lg border border-border/40 w-48">
+      <div className="flex items-center justify-between mb-2">
+        <div className="text-sm font-semibold">Recommended Path</div>
+        <Badge>{ids.length}</Badge>
+      </div>
+      <div className="flex flex-col gap-2">
+        {items.map((c: any) => (
+          <button key={c.id} onClick={() => onClick(c.id)} className="text-left text-sm hover:underline truncate">
+            {c.title}
+          </button>
         ))}
       </div>
     </div>
