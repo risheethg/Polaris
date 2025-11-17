@@ -15,7 +15,7 @@ from langchain_core.output_parsers import JsonOutputParser
 load_dotenv()
 
 # --- Initialization ---
-model = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=os.getenv("GEMINI_API_KEY"))
+model = ChatGoogleGenerativeAI(model="gemini-2.5-flash", google_api_key=os.getenv("GEMINI_API_KEY"))
 json_parser = JsonOutputParser()
 router = APIRouter(tags=["Skill Assessment"])
 

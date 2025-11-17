@@ -4,7 +4,7 @@ import { GlassCard } from '@/components/GlassCard';
 import { PolarisLogo } from '@/components/PolarisLogo'; // Keep for hero
 import { ArrowRight, Loader2, Navigation, Sparkles, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth.tsx';
 import { useDebug } from '@/context/DebugContext';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '@/firebase';
